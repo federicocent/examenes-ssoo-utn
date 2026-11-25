@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Exámenes — Sistemas Operativos (UTN FRM)</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-logo">SO</div>
+        <div>
+          <h1>Simulador de Exámenes — Sistemas Operativos</h1>
+          <span>UTN FRM • Globales, 1º y 2º Parcial (Práctica y Teoría) con Diagramas y Tablas</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Secciones principales">
+        <button type="button" class="tab-btn active" data-tab="practicar">
+          📝 Practicar <span class="badge-count" id="badge-total-bank">0</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="catalogo">
+          📚 Exámenes Completos
+        </button>
+        <button type="button" class="tab-btn" data-tab="errores">
+          🎯 Repasar Falladas <span class="badge-count danger" id="badge-mistakes">0</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="agregar">
+          ➕ Agregar Pregunta <span class="badge-count" id="badge-custom">0</span>
+        </button>
+        <button type="button" class="btn btn-sm" id="btn-theme">🌙 Modo oscuro</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ==================== SECCIÓN 1: PRACTICAR ==================== -->
+    <section id="view-practicar" class="view-section active">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">⚙️ Configuración del Examen / Mezcla de Preguntas</h2>
+          <div class="btn-group">
+            <button type="button" class="btn" id="btn-reshuffle-now">🔀 Mezclar orden actual</button>
+            <button type="button" class="btn btn-primary" id="btn-new-mix">🚀 Generar nueva tanda</button>
+            <button type="button" class="btn btn-success" id="btn-check-all">✓ Corregir todas</button>
+          </div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="field-group">
+            <label for="filter-category">Categoría de exámenes</label>
+            <select id="filter-category"></select>
+          </div>
+
+          <div class="field-group">
+            <label for="filter-exam">Examen específico (o todos mezclados)</label>
+            <select id="filter-exam"></select>
+          </div>
+
+          <div class="field-group">
+            <label for="filter-limit">Cantidad de preguntas</label>
+            <select id="filter-limit">
+              <option value="10">10 preguntas</option>
+              <option value="20" selected>20 preguntas</option>
+              <option value="40">40 preguntas</option>
+              <option value="ALL">Todas las del filtro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div style="display:flex; flex-wrap:wrap; gap:1.25rem;">
+            <label class="check-label">
+              <input type="checkbox" id="chk-shuffle" checked>
+              Mezclar preguntas aleatoriamente
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="chk-single-view">
+              Mostrar una pregunta por vez (modo paso a paso)
+            </label>
+          </div>
+          <span style="font-size:0.82rem; color:var(--text-muted);">
+            Podés comprobar cada respuesta al instante o corregir todo al final.
+          </span>
+        </div>
+      </div>
+
+      <!-- Marcador en vivo -->
+      <div class="scoreboard">
+        <div class="stat-card">
+          <span class="stat-label">En esta tanda</span>
+          <span class="stat-value" id="stat-total">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Correctas</span>
+          <span class="stat-value ok" id="stat-right">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Incorrectas</span>
+          <span class="stat-value bad" id="stat-wrong">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Sin corregir</span>
+          <span class="stat-value" id="stat-pending">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Puntaje / Nota</span>
+          <span class="stat-value accent" id="stat-score">0%</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap" title="Progreso de preguntas corregidas">
+        <div class="progress-bar-fill" id="session-progress-fill" style="width:0%"></div>
+      </div>
+
+      <!-- Controles de vista 1 por 1 -->
+      <div id="stepper-controls" class="panel" style="display:none;">
+        <div class="stepper-nav">
+          <button type="button" class="btn btn-sm" id="btn-prev-q">← Anterior</button>
+          <div class="dot-strip" id="stepper-dots"></div>
+          <button type="button" class="btn btn-sm" id="btn-next-q">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Lista de preguntas -->
+      <div id="questions-container"></div>
+    </section>
+
+    <!-- ==================== SECCIÓN 2: CATÁLOGO DE EXÁMENES ==================== -->
+    <section id="view-catalogo" class="view-section">
+      <div class="panel">
+        <h2 class="panel-title">📚 Todos los Exámenes Cargados</h2>
+        <p style="margin:0.35rem 0 0; color:var(--text-muted); font-size:0.9rem;">
+          Elegí cualquier parcial o integrador para resolverlo completo en su orden original o con sus preguntas mezcladas. Todos los grafos, diagramas de Gantt, códigos y tablas de páginas están incluidos.
+        </p>
+      </div>
+      <div class="catalog-grid" id="catalog-grid"></div>
+    </section>
+
+    <!-- ==================== SECCIÓN 3: REPASAR ERRORES ==================== -->
+    <section id="view-errores" class="view-section">
+      <div id="mistakes-container"></div>
+    </section>
+
+    <!-- ==================== SECCIÓN 4: AGREGAR / GESTIONAR PREGUNTAS ==================== -->
+    <section id="view-agregar" class="view-section">
+      <form id="creator-form" class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title" id="form-title-lbl">➕ Agregar Nueva Pregunta al Banco</h2>
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm" id="btn-export-json">⬇️ Exportar Backup (.json)</button>
+            <button type="button" class="btn btn-sm" id="btn-import-json">⬆️ Importar Backup (.json)</button>
+            <input type="file" id="input-import-json" accept=".json,application/json" style="display:none;">
+          </div>
+        </div>
+
+        <div class="creator-grid">
+          <div class="field-group">
+            <label for="new-category">Categoría</label>
+            <select id="new-category">
+              <option value="Mis Preguntas">Mis Preguntas</option>
+              <option value="Globales / Integradores">Globales / Integradores</option>
+              <option value="2º Parcial Práctica">2º Parcial Práctica</option>
+              <option value="1º Parcial Práctica">1º Parcial Práctica</option>
+              <option value="2º Parcial Teoría">2º Parcial Teoría</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="new-exam">Nombre del Examen / Tema</label>
+            <input type="text" id="new-exam" list="datalist-exams" value="Mis Ejercicios Personalizados" placeholder="Ej: Global 2026 - Práctica Extra">
+            <datalist id="datalist-exams"></datalist>
+          </div>
+
+          <div class="field-group">
+            <label for="new-type">Tipo de pregunta</label>
+            <select id="new-type">
+              <option value="single">Opción Múltiple (1 respuesta correcta)</option>
+              <option value="multi">Opción Múltiple (Varias respuestas correctas)</option>
+              <option value="vf">Verdadero / Falso</option>
+              <option value="text">Completar texto / número / comando</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="new-points">Puntaje asignado</label>
+            <input type="number" id="new-points" min="1" max="100" value="10">
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top:0.9rem;">
+          <label for="new-prompt">Enunciado de la pregunta *</label>
+          <textarea id="new-prompt" rows="3" placeholder="Escribí acá el enunciado completo del ejercicio..." required></textarea>
+        </div>
+
+        <!-- Opciones según tipo -->
+        <div id="creator-vf-box" style="margin-top:0.9rem; display:none;">
+          <label style="font-size:0.84rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:0.4rem;">Respuesta correcta:</label>
+          <div style="display:flex; gap:1.25rem;">
+            <label class="check-label"><input type="radio" name="new_vf_ans" value="V" checked> Verdadero (V)</label>
+            <label class="check-label"><input type="radio" name="new_vf_ans" value="F"> Falso (F)</label>
+          </div>
+        </div>
+
+        <div id="creator-options-box" style="margin-top:0.9rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem;">
+            <label style="font-size:0.84rem; font-weight:700; color:var(--text-muted);">Opciones (marcá a la izquierda cuál o cuáles son correctas):</label>
+            <button type="button" class="btn btn-sm" id="btn-add-opt-row">+ Agregar opción</button>
+          </div>
+          <div id="creator-options-list"></div>
+        </div>
+
+        <div id="creator-text-box" style="margin-top:0.9rem; display:none;">
+          <div class="field-group">
+            <label for="new-text-accepted">Respuestas aceptadas (separá variantes equivalentes con barra vertical <code>|</code>)</label>
+            <input type="text" id="new-text-accepted" placeholder="Ej: 0Fh | 0x0F | 00001111">
+          </div>
+        </div>
+
+        <!-- Diagramas, cuadros y código -->
+        <div style="margin-top:1.15rem; padding-top:1rem; border-top:1px solid var(--border);">
+          <h3 style="margin:0 0 0.65rem; font-size:0.96rem;">🖼️ Adjuntar Diagrama, Cuadro / Tabla o Código (Opcional)</h3>
+
+          <div class="creator-grid">
+            <div class="field-group">
+              <label>Imagen / Diagrama (clic para subir o pegá con Ctrl+V)</label>
+              <div class="paste-zone" id="paste-img-zone" tabindex="0">
+                📎 Hacé clic para elegir una imagen o presioná <strong>Ctrl + V</strong> para pegar un recorte de diagrama
+              </div>
+              <input type="file" id="input-img-file" accept="image/*" style="display:none;">
+              <div id="creator-img-preview"></div>
+            </div>
+
+            <div class="field-group">
+              <label for="new-code">Bloque de Código (C, Assembler, Pseudocódigo, Linux)</label>
+              <textarea id="new-code" rows="4" placeholder="Opcional: pegá código que acompañe la pregunta..." style="font-family:monospace;"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:0.85rem;">
+            <label class="check-label">
+              <input type="checkbox" id="chk-include-table">
+              Incluir un cuadro / tabla personalizada en esta pregunta
+            </label>
+
+            <div id="table-builder-container" style="display:none; margin-top:0.65rem;">
+              <div class="btn-group" style="margin-bottom:0.5rem;">
+                <button type="button" class="btn btn-sm" id="btn-tb-add-row">+ Fila</button>
+                <button type="button" class="btn btn-sm" id="btn-tb-del-row">− Fila</button>
+                <button type="button" class="btn btn-sm" id="btn-tb-add-col">+ Columna</button>
+                <button type="button" class="btn btn-sm" id="btn-tb-del-col">− Columna</button>
+              </div>
+              <div id="table-builder-grid-wrap"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top:0.95rem;">
+          <label for="new-explanation">Explicación / Resolución paso a paso (se muestra al corregir)</label>
+          <textarea id="new-explanation" rows="2" placeholder="Opcional: explicá por qué es esa la respuesta o dejá las cuentas..."></textarea>
+        </div>
+
+        <div class="btn-group" style="margin-top:1.1rem;">
+          <button type="submit" class="btn btn-primary" id="btn-save-question">💾 Guardar Pregunta</button>
+          <button type="button" class="btn" id="btn-cancel-edit" style="display:none;">Cancelar edición</button>
+        </div>
+      </form>
+
+      <div class="panel">
+        <h3 class="panel-title" style="margin-bottom:0.85rem;">🗂️ Tus Preguntas Agregadas</h3>
+        <div class="options-list" id="custom-questions-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="diagramas.js"></script>
+  <script src="preguntas_parte1.js"></script>
+  <script src="preguntas_parte2.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

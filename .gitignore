@@ -1,0 +1,4 @@
+# Ignorar PDFs y fotos crudas de exámenes para un despliegue liviano en GitHub Pages
+*.pdf
+*.jpg
+*.jpeg
