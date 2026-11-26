@@ -159,6 +159,17 @@ body {
   background: var(--text-muted);
 }
 
+.btn-fav.active {
+  background: var(--warning-bg);
+  border-color: #f59e0b;
+  color: var(--warning);
+}
+
+.btn-fav.active:hover {
+  border-color: #d97706;
+  color: var(--warning);
+}
+
 .toast-undo {
   position: fixed;
   bottom: 1.25rem;

@@ -24,6 +24,9 @@
         <button type="button" class="tab-btn" data-tab="catalogo">
           📚 Exámenes Completos
         </button>
+        <button type="button" class="tab-btn" data-tab="uart">
+          🔌 Registros UART <span class="badge-count" id="badge-uart">0</span>
+        </button>
         <button type="button" class="tab-btn" data-tab="errores">
           🎯 Repasar Falladas <span class="badge-count danger" id="badge-mistakes">0</span>
         </button>
@@ -140,6 +143,59 @@
         </p>
       </div>
       <div class="catalog-grid" id="catalog-grid"></div>
+    </section>
+
+    <!-- ==================== SECCIÓN 2B: SECCIÓN APARTE - REGISTROS UART ==================== -->
+    <section id="view-uart" class="view-section">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">🔌 Práctica Exclusiva — Todos los Registros de la UART (8250 / 16550A)</h2>
+            <p style="margin:0.3rem 0 0; color:var(--text-muted); font-size:0.88rem;">
+              Sección independiente: estos ejercicios <strong>no se mezclan</strong> con los parciales ni globales. Incluye práctica de <code>RBR</code>, <code>THR</code>, <code>DLL</code>, <code>DLM</code>, <code>IER</code>, <code>IIR</code>, <code>FCR</code>, <code>LCR</code>, <code>MCR</code>, <code>LSR</code>, <code>MSR</code> y <code>SCR</code>.
+            </p>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn" id="btn-uart-shuffle">🔀 Mezclar orden</button>
+            <button type="button" class="btn" id="btn-uart-ordered">📄 Orden 1 al 10</button>
+            <button type="button" class="btn" id="btn-uart-favs">⭐ Solo favoritas (0)</button>
+            <button type="button" class="btn" id="btn-uart-reset">↺ Reiniciar respuestas</button>
+            <button type="button" class="btn btn-success" id="btn-uart-check-all">✓ Corregir todos</button>
+          </div>
+        </div>
+
+        <details style="margin-top:0.5rem;">
+          <summary style="cursor:pointer; font-weight:700; color:var(--primary); font-size:0.9rem;">
+            📖 Ver / ocultar tabla resumen de todos los registros y bits de la UART (Ayuda memoria)
+          </summary>
+          <div id="uart-ref-container" style="margin-top:0.75rem;"></div>
+        </details>
+      </div>
+
+      <div class="scoreboard">
+        <div class="stat-card">
+          <span class="stat-label">Ejercicios UART</span>
+          <span class="stat-value" id="uart-stat-total">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Correctas</span>
+          <span class="stat-value ok" id="uart-stat-right">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Incorrectas</span>
+          <span class="stat-value bad" id="uart-stat-wrong">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Sin corregir</span>
+          <span class="stat-value" id="uart-stat-pending">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Puntaje UART</span>
+          <span class="stat-value accent" id="uart-stat-score">0%</span>
+        </div>
+      </div>
+
+      <div id="uart-questions-container"></div>
     </section>
 
     <!-- ==================== SECCIÓN 3: REPASAR ERRORES ==================== -->
@@ -285,6 +341,7 @@
   <script src="diagramas.js"></script>
   <script src="preguntas_parte1.js"></script>
   <script src="preguntas_parte2.js"></script>
+  <script src="preguntas_uart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

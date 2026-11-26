@@ -3,6 +3,7 @@
   const STORAGE_CUSTOM = 'ssoo_utn_preguntas_usuario_v1';
   const STORAGE_WRONG = 'ssoo_utn_errores_ids_v1';
   const STORAGE_TRASH = 'ssoo_utn_papelera_ids_v1';
+  const STORAGE_FAV = 'ssoo_utn_favoritas_ids_v1';
   const STORAGE_STATS = 'ssoo_utn_stats_examenes_v1';
   const STORAGE_THEME = 'ssoo_utn_tema_v1';
 
@@ -16,10 +17,11 @@
   let customQuestions = loadJson(STORAGE_CUSTOM, []);
   let wrongIds = new Set(loadJson(STORAGE_WRONG, []));
   let trashedIds = new Set(loadJson(STORAGE_TRASH, []));
+  let favoriteIds = new Set(loadJson(STORAGE_FAV, []));
   let examStats = loadJson(STORAGE_STATS, {});
   let toastTimer = null;
 
-  // Estado de la sesión activa
+  // Estado de la sesión activa (Parciales y Globales)
   let session = {
     questions: [],
     answers: {},   // qId -> valor del usuario
@@ -27,6 +29,17 @@
     currentIndex: 0,
     viewMode: 'all' // 'single' | 'all'
   };
+
+  // Estado aislado de la sección exclusiva de Registros UART (no se mezcla con parciales)
+  let uartSession = {
+    questions: [],
+    answers: {},
+    checked: {}
+  };
+
+  function isUartId(qId) {
+    return String(qId || '').startsWith('uart_ex_');
+  }
 
   // Estado del creador de preguntas
   let editingCustomId = null;
@@ -56,6 +69,14 @@
 
   function getRawQuestions() {
     return [...(window.BANCO_PREGUNTAS || []), ...customQuestions];
+  }
+
+  function getRawUartQuestions() {
+    return [...(window.BANCO_UART || [])];
+  }
+
+  function getActiveUartQuestions() {
+    return getRawUartQuestions().filter(q => !trashedIds.has(q.id));
   }
 
   function getAllQuestions() {
@@ -175,8 +196,9 @@
   function populateFilters() {
     const raw = getRawQuestions();
     const rawIds = new Set(raw.map(q => q.id));
+    const uartIds = new Set(getRawUartQuestions().map(q => q.id));
 
-    const cleanedTrash = [...trashedIds].filter(id => rawIds.has(id));
+    const cleanedTrash = [...trashedIds].filter(id => rawIds.has(id) || uartIds.has(id));
     if (cleanedTrash.length !== trashedIds.size) {
       trashedIds = new Set(cleanedTrash);
       saveJson(STORAGE_TRASH, cleanedTrash);
@@ -196,8 +218,10 @@
     const prevExam = examSelect.value || 'ALL';
 
     const activeCustomCount = customQuestions.filter(q => !trashedIds.has(q.id)).length;
+    const favCount = all.filter(q => favoriteIds.has(q.id)).length;
     const categories = [
       { val: 'ALL', label: `Todas las prácticas (${all.length} ejercicios activos)` },
+      { val: 'FAVORITAS', label: `⭐ Mis Favoritas (${favCount})` },
       { val: 'CARPETA_PAGINA', label: 'Solo carpeta "pagina" (Globales + 2ºP Práctica)' },
       { val: 'Globales / Integradores', label: 'Globales / Integradores (Práctica)' },
       { val: '2º Parcial Práctica', label: '2º Parcial Práctica' },
@@ -221,6 +245,9 @@
 
   function filterByCategory(list, catVal) {
     if (catVal === 'ALL') return list;
+    if (catVal === 'FAVORITAS') {
+      return list.filter(q => favoriteIds.has(q.id));
+    }
     if (catVal === 'CARPETA_PAGINA') {
       return list.filter(q => q.category === 'Globales / Integradores' || q.category === '2º Parcial Práctica');
     }
@@ -321,9 +348,10 @@
     }
   }
 
-  function renderQuestionCard(q, idx) {
-    const chk = session.checked[q.id];
-    const ans = session.answers[q.id];
+  function renderQuestionCard(q, idx, targetSession) {
+    const activeState = targetSession || session;
+    const chk = activeState.checked[q.id];
+    const ans = activeState.answers[q.id];
     const stateClass = chk ? (chk.isCorrect ? 'correcta' : 'incorrecta') : '';
     const isCustom = String(q.id).startsWith('custom_');
 
@@ -345,13 +373,14 @@
       <article class="question-card ${stateClass}" id="qcard-${escapeHtml(q.id)}">
         <div class="q-meta">
           <div class="q-badges">
-            <span class="q-number">#${idx + 1} de ${session.questions.length}</span>
+            <span class="q-number">#${idx + 1} de ${activeState.questions.length}</span>
             <span class="q-badge cat">${escapeHtml(q.category)}</span>
             <span class="q-badge">${escapeHtml(q.exam)}</span>
             ${isCustom ? '<span class="q-badge custom">Agregada por vos</span>' : ''}
           </div>
           <div class="btn-group">
             <span class="q-badge">${q.points || 10} pts</span>
+            <button type="button" class="btn btn-sm btn-fav ${favoriteIds.has(q.id) ? 'active' : ''}" data-action="toggle-fav" data-qid="${escapeHtml(q.id)}" title="${favoriteIds.has(q.id) ? 'Quitar de favoritas' : 'Marcar como favorita'}">${favoriteIds.has(q.id) ? '⭐ Favorita' : '☆ Favorita'}</button>
             <button type="button" class="btn btn-sm" data-action="trash-one" data-qid="${escapeHtml(q.id)}" title="Eliminar temporalmente y mover a la Papelera de reciclaje">🗑️ Enviar a papelera</button>
           </div>
         </div>
@@ -534,6 +563,14 @@
   }
 
   function checkOneQuestion(qId) {
+    if (isUartId(qId)) {
+      const uq = uartSession.questions.find(item => item.id === qId);
+      if (!uq) return;
+      uartSession.checked[qId] = { isCorrect: evaluateQuestion(uq, uartSession.answers[qId]) };
+      renderUartSection();
+      return;
+    }
+
     const q = session.questions.find(item => item.id === qId);
     if (!q) return;
     const isCorrect = evaluateQuestion(q, session.answers[qId]);
@@ -658,9 +695,80 @@
   function updateHeaderBadges() {
     const active = getAllQuestions();
     document.getElementById('badge-total-bank').textContent = active.length;
+    const uartBadge = document.getElementById('badge-uart');
+    if (uartBadge) uartBadge.textContent = getActiveUartQuestions().length;
     document.getElementById('badge-mistakes').textContent = active.filter(q => wrongIds.has(q.id)).length;
     document.getElementById('badge-trash').textContent = trashedIds.size;
     document.getElementById('badge-custom').textContent = customQuestions.length;
+  }
+
+  // =========================================================================
+  // SECCIÓN APARTE: REGISTROS DE LA UART (AISLADA DE PARCIALES)
+  // =========================================================================
+  function initUartSession(shuffle) {
+    const list = getActiveUartQuestions();
+    uartSession.questions = shuffle ? shuffleArray(list) : list;
+    uartSession.answers = {};
+    uartSession.checked = {};
+    const refBox = document.getElementById('uart-ref-container');
+    if (refBox && window.TABLA_RESUMEN_UART) {
+      refBox.innerHTML = window.TABLA_RESUMEN_UART;
+    }
+    renderUartSection();
+  }
+
+  function renderUartSection() {
+    const container = document.getElementById('uart-questions-container');
+    if (!container) return;
+
+    const total = uartSession.questions.length;
+    let right = 0;
+    let wrong = 0;
+    let earnedPts = 0;
+    let totalPts = 0;
+
+    uartSession.questions.forEach(q => {
+      const pts = Number(q.points) || 10;
+      totalPts += pts;
+      const chk = uartSession.checked[q.id];
+      if (chk) {
+        if (chk.isCorrect) {
+          right++;
+          earnedPts += pts;
+        } else {
+          wrong++;
+        }
+      }
+    });
+
+    const pending = total - (right + wrong);
+    const pct = totalPts > 0 ? Math.round((earnedPts / totalPts) * 100) : 0;
+
+    document.getElementById('uart-stat-total').textContent = total;
+    document.getElementById('uart-stat-right').textContent = right;
+    document.getElementById('uart-stat-wrong').textContent = wrong;
+    document.getElementById('uart-stat-pending').textContent = pending;
+    document.getElementById('uart-stat-score').textContent = `${pct}% (${earnedPts}/${totalPts}p)`;
+
+    if (total === 0) {
+      container.innerHTML = `
+        <div class="panel" style="text-align:center; padding:2rem;">
+          <h3>No quedan ejercicios UART activos</h3>
+          <p style="color:var(--text-muted)">Restaurá los ejercicios desde la pestaña Papelera si los ocultaste temporalmente.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = uartSession.questions
+      .map((q, idx) => renderQuestionCard(q, idx, uartSession))
+      .join('');
+  }
+
+  function checkAllUartQuestions() {
+    uartSession.questions.forEach(q => {
+      uartSession.checked[q.id] = { isCorrect: evaluateQuestion(q, uartSession.answers[q.id]) };
+    });
+    renderUartSection();
   }
 
   function showToast(msgHtml) {
@@ -679,10 +787,44 @@
     }, 4500);
   }
 
+  function toggleFavorite(qId) {
+    if (!qId) return;
+    const nowFav = !favoriteIds.has(qId);
+    if (nowFav) favoriteIds.add(qId);
+    else favoriteIds.delete(qId);
+    saveJson(STORAGE_FAV, [...favoriteIds]);
+
+    if (isUartId(qId)) {
+      renderUartSection();
+    } else {
+      populateFilters();
+      renderSession();
+    }
+    updateUartFavButton();
+    showToast(`<span>${nowFav ? '⭐ Pregunta marcada como favorita' : '☆ Pregunta quitada de favoritas'}</span>`);
+  }
+
+  function updateUartFavButton() {
+    const btn = document.getElementById('btn-uart-favs');
+    if (!btn) return;
+    const n = getActiveUartQuestions().filter(q => favoriteIds.has(q.id)).length;
+    btn.textContent = `⭐ Solo favoritas (${n})`;
+  }
+
   function trashOneQuestion(qId) {
     if (!qId || trashedIds.has(qId)) return;
     trashedIds.add(qId);
     saveJson(STORAGE_TRASH, [...trashedIds]);
+
+    if (isUartId(qId)) {
+      uartSession.questions = uartSession.questions.filter(q => q.id !== qId);
+      delete uartSession.answers[qId];
+      delete uartSession.checked[qId];
+      populateFilters();
+      renderUartSection();
+      showToast(`<span>🗑️ Ejercicio UART enviado a la Papelera (${trashedIds.size})</span> <button type="button" data-action="restore-one" data-qid="${escapeHtml(qId)}">Deshacer</button>`);
+      return;
+    }
 
     session.questions = session.questions.filter(q => q.id !== qId);
     delete session.answers[qId];
@@ -705,6 +847,17 @@
     if (toastEl) toastEl.style.display = 'none';
 
     populateFilters();
+
+    if (isUartId(qId)) {
+      const uq = getRawUartQuestions().find(item => item.id === qId);
+      if (uq && !uartSession.questions.some(item => item.id === qId)) {
+        uartSession.questions.push(uq);
+      }
+      renderUartSection();
+      showToast(`<span>♻️ Ejercicio restaurado a la sección Registros UART</span>`);
+      return;
+    }
+
     if (session.questions.length === 0) {
       startNewSession();
     } else {
@@ -726,14 +879,16 @@
     trashedIds.clear();
     saveJson(STORAGE_TRASH, []);
     populateFilters();
+    uartSession.questions = getActiveUartQuestions();
+    renderUartSection();
     if (session.questions.length === 0) {
       startNewSession();
     }
-    showToast(`<span>♻️ Todas las preguntas fueron restauradas al banco activo</span>`);
+    showToast(`<span>♻️ Todas las preguntas fueron restauradas</span>`);
   }
 
   function renderTrashView() {
-    const trashedList = getRawQuestions().filter(q => trashedIds.has(q.id));
+    const trashedList = [...getRawQuestions(), ...getRawUartQuestions()].filter(q => trashedIds.has(q.id));
     const box = document.getElementById('trash-container');
     if (!box) return;
 
@@ -1084,6 +1239,7 @@
       customQuestions,
       wrongIds: [...wrongIds],
       trashedIds: [...trashedIds],
+      favoriteIds: [...favoriteIds],
       examStats
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -1115,6 +1271,11 @@
         if (Array.isArray(data.trashedIds)) {
           data.trashedIds.forEach(id => trashedIds.add(id));
           saveJson(STORAGE_TRASH, [...trashedIds]);
+        }
+        if (Array.isArray(data.favoriteIds)) {
+          data.favoriteIds.forEach(id => favoriteIds.add(id));
+          saveJson(STORAGE_FAV, [...favoriteIds]);
+          updateUartFavButton();
         }
         populateFilters();
         startNewSession();
@@ -1196,14 +1357,22 @@
 
       if (action === 'pick-vf') {
         const qId = btn.dataset.qid;
-        if (session.checked[qId]) return;
-        session.answers[qId] = btn.dataset.val;
-        renderSession();
+        const target = isUartId(qId) ? uartSession : session;
+        if (target.checked[qId]) return;
+        target.answers[qId] = btn.dataset.val;
+        if (isUartId(qId)) renderUartSection();
+        else renderSession();
       } else if (action === 'check-one') {
         checkOneQuestion(btn.dataset.qid);
       } else if (action === 'retry-one') {
-        delete session.checked[btn.dataset.qid];
-        renderSession();
+        const qId = btn.dataset.qid;
+        if (isUartId(qId)) {
+          delete uartSession.checked[qId];
+          renderUartSection();
+        } else {
+          delete session.checked[qId];
+          renderSession();
+        }
       } else if (action === 'goto-q') {
         session.currentIndex = Number(btn.dataset.idx);
         renderSession();
@@ -1218,6 +1387,8 @@
         switchTab('practicar');
         startNewSession();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (action === 'toggle-fav') {
+        toggleFavorite(btn.dataset.qid);
       } else if (action === 'trash-one') {
         trashOneQuestion(btn.dataset.qid);
       } else if (action === 'restore-one') {
@@ -1255,43 +1426,48 @@
 
     document.addEventListener('change', (e) => {
       const el = e.target;
+      const qId = el.dataset.qid;
+      const target = isUartId(qId) ? uartSession : session;
+
       if (el.dataset.action === 'pick-single') {
-        session.answers[el.dataset.qid] = Number(el.value);
-        renderSession();
+        target.answers[qId] = Number(el.value);
+        if (isUartId(qId)) renderUartSection();
+        else renderSession();
       } else if (el.dataset.action === 'pick-multi') {
-        const qId = el.dataset.qid;
-        const cur = new Set(Array.isArray(session.answers[qId]) ? session.answers[qId] : []);
+        const cur = new Set(Array.isArray(target.answers[qId]) ? target.answers[qId] : []);
         const val = Number(el.value);
         if (el.checked) cur.add(val);
         else cur.delete(val);
-        session.answers[qId] = [...cur];
-        renderSession();
+        target.answers[qId] = [...cur];
+        if (isUartId(qId)) renderUartSection();
+        else renderSession();
       } else if (el.dataset.action === 'input-blank' && el.tagName === 'SELECT') {
-        const qId = el.dataset.qid;
         const fidx = Number(el.dataset.fidx);
-        const q = session.questions.find(item => item.id === qId);
-        if (!Array.isArray(session.answers[qId])) {
-          session.answers[qId] = q.fields.map(() => '');
+        const q = target.questions.find(item => item.id === qId);
+        if (!Array.isArray(target.answers[qId])) {
+          target.answers[qId] = q.fields.map(() => '');
         }
-        session.answers[qId][fidx] = el.value;
-        if (session.viewMode === 'single') renderStepperDots();
+        target.answers[qId][fidx] = el.value;
+        if (!isUartId(qId) && session.viewMode === 'single') renderStepperDots();
       }
     });
 
     document.addEventListener('input', (e) => {
       const el = e.target;
+      const qId = el.dataset.qid;
+      const target = isUartId(qId) ? uartSession : session;
+
       if (el.dataset.action === 'input-text') {
-        session.answers[el.dataset.qid] = el.value;
-        if (session.viewMode === 'single') renderStepperDots();
+        target.answers[qId] = el.value;
+        if (!isUartId(qId) && session.viewMode === 'single') renderStepperDots();
       } else if (el.dataset.action === 'input-blank' && el.tagName === 'INPUT') {
-        const qId = el.dataset.qid;
         const fidx = Number(el.dataset.fidx);
-        const q = session.questions.find(item => item.id === qId);
-        if (!Array.isArray(session.answers[qId])) {
-          session.answers[qId] = q.fields.map(() => '');
+        const q = target.questions.find(item => item.id === qId);
+        if (!Array.isArray(target.answers[qId])) {
+          target.answers[qId] = q.fields.map(() => '');
         }
-        session.answers[qId][fidx] = el.value;
-        if (session.viewMode === 'single') renderStepperDots();
+        target.answers[qId][fidx] = el.value;
+        if (!isUartId(qId) && session.viewMode === 'single') renderStepperDots();
       } else if (el.dataset.tbR !== undefined) {
         const r = Number(el.dataset.tbR);
         const c = Number(el.dataset.tbC);
@@ -1305,6 +1481,35 @@
         e.preventDefault();
         checkOneQuestion(e.target.dataset.qid);
       }
+    });
+
+    // Botones exclusivos de la pestaña Registros UART
+    document.getElementById('btn-uart-shuffle').addEventListener('click', () => {
+      uartSession.questions = shuffleArray(uartSession.questions);
+      renderUartSection();
+    });
+    document.getElementById('btn-uart-ordered').addEventListener('click', () => {
+      uartSession.questions = getActiveUartQuestions();
+      renderUartSection();
+    });
+    document.getElementById('btn-uart-favs').addEventListener('click', () => {
+      const favs = getActiveUartQuestions().filter(q => favoriteIds.has(q.id));
+      if (favs.length === 0) {
+        alert('Todavía no marcaste ningún ejercicio UART como favorito. Tocá "☆ Favorita" en la tarjeta del ejercicio.');
+        return;
+      }
+      uartSession.questions = favs;
+      uartSession.answers = {};
+      uartSession.checked = {};
+      renderUartSection();
+    });
+    document.getElementById('btn-uart-reset').addEventListener('click', () => {
+      uartSession.answers = {};
+      uartSession.checked = {};
+      renderUartSection();
+    });
+    document.getElementById('btn-uart-check-all').addEventListener('click', () => {
+      checkAllUartQuestions();
     });
 
     // Eventos de pestaña Errores
@@ -1414,5 +1619,7 @@
     resetCreatorForm();
     bindEvents();
     startNewSession();
+    initUartSession(false);
+    updateUartFavButton();
   });
 })();
