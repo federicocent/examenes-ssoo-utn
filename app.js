@@ -167,18 +167,24 @@
   // =========================================================================
   function populateFilters() {
     const all = getAllQuestions();
+    const validIds = new Set(all.map(q => q.id));
+    const cleanedWrong = [...wrongIds].filter(id => validIds.has(id));
+    if (cleanedWrong.length !== wrongIds.size) {
+      wrongIds = new Set(cleanedWrong);
+      saveJson(STORAGE_WRONG, cleanedWrong);
+    }
+
     const catSelect = document.getElementById('filter-category');
     const examSelect = document.getElementById('filter-exam');
     const prevCat = catSelect.value || 'ALL';
     const prevExam = examSelect.value || 'ALL';
 
     const categories = [
-      { val: 'ALL', label: `Todas las categorías (${all.length} preguntas)` },
+      { val: 'ALL', label: `Todas las prácticas (${all.length} ejercicios)` },
       { val: 'CARPETA_PAGINA', label: 'Solo carpeta "pagina" (Globales + 2ºP Práctica)' },
-      { val: 'Globales / Integradores', label: 'Globales / Integradores' },
+      { val: 'Globales / Integradores', label: 'Globales / Integradores (Práctica)' },
       { val: '2º Parcial Práctica', label: '2º Parcial Práctica' },
       { val: '1º Parcial Práctica', label: '1º Parcial Práctica' },
-      { val: '2º Parcial Teoría', label: '2º Parcial Teoría' },
       { val: 'Mis Preguntas', label: `Mis Preguntas Agregadas (${customQuestions.length})` }
     ];
 

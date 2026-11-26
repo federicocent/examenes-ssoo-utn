@@ -1,4 +1,4 @@
-// Parte 2 del Banco de Preguntas: 1º Parcial Práctica y 2º Parcial Teoría (Carpetas hermanas de SSOO)
+// Parte 2 del Banco de Preguntas: 1º Parcial Práctica (Solo ejercicios prácticos)
 window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
 
 (function () {
@@ -18,40 +18,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       accepted: ['aabbaaccbbddaacbdd', 'aaaabbaaccbbddcbdd'],
       displayAnswer: 'AABBAACCBBDDAACBDD (o AAAABBAACCBBDDCBDD si el saliente se encola antes)',
       explanation: 'Con q=2 (encolando llegada en t=2 antes del saliente): A(0..2), B(2..4, llega C en 3), A(4..6, llega D en 5), C(6..8), B(8..10), D(10..12), A(12..14 fin), C(14..15 fin), B(15..16 fin), D(16..18 fin) → AABBAACCBBDDAACBDD. (Se aceptan ambas convenciones de desempate).'
-    },
-    {
-      id: 'p1_180925_t1_2',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 18/09/2025 - Tema 1',
-      points: 5,
-      type: 'single',
-      prompt: 'Ejercicio 2: Según Tanenbaum, indique qué meta de las indicadas abajo NO corresponde a un sistema cuyo entorno es de procesamiento por lotes:',
-      options: [
-        'a) Rendimiento - Maximizar el número de trabajos por hora.',
-        'b) Tiempo de retorno - Minimizar el tiempo entre la entrega y la terminación.',
-        'c) Utilización de la CPU - Mantener ocupada la CPU todo el tiempo.',
-        'd) Cumplir con los plazos - Evitar perder datos.',
-        'e) Las opciones presentadas no son correctas.'
-      ],
-      answer: 3,
-      explanation: '"Cumplir con los plazos - Evitar perder datos" es una meta propia de los sistemas de TIEMPO REAL, no de los sistemas por lotes (cuyas metas son rendimiento, tiempo de retorno y utilización de CPU).'
-    },
-    {
-      id: 'p1_180925_t1_3',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 18/09/2025 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 3: ¿Cuál de las siguientes metas cumplen los algoritmos de tiempo real?',
-      options: [
-        'a) Cumplir con los plazos y Predictibilidad.',
-        'b) Apropiatividad y no apropiatividad.',
-        'c) Tiempo de retorno y Utilización de la CPU.',
-        'd) Rendimiento y Predictibilidad.',
-        'e) Las opciones presentadas no son correctas.'
-      ],
-      answer: 0,
-      explanation: 'Según Tanenbaum (Fig. 2-41), las dos metas de los sistemas de tiempo real son: Cumplir con los plazos (evitar perder datos) y Predictibilidad (evitar degradación de calidad).'
     },
     {
       id: 'p1_180925_t1_4',
@@ -121,40 +87,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 't=0..2: AA (llega B antes que A → [B,A]). t=2..4: BB (llega C en 3 → [A,C,B]). t=4..6: AA (llega D en 5 → [C,B,D,A]). t=6..8: CC ([B,D,A,C]). t=8..10: BB ([D,A,C,B]). t=10..12: DD ([A,C,B,D]). t=12..14: AA(fin). t=14..15: C(fin). t=15..16: B(fin). t=16..18: DD(fin) → AABBAACCBBDDAACBDD.'
     },
     {
-      id: 'p1_180925_t2_2',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 18/09/2025 - Tema 2',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 2: Seleccione la meta que cumplen los Sistemas por Lotes:',
-      options: [
-        'a) Maximizar el rendimiento (y minimizar el tiempo de retorno)',
-        'b) Cumplir las expectativas de los usuarios',
-        'c) Evitar perder datos',
-        'd) Minimizar el tiempo de respuesta interactivo',
-        'e) La b y la c'
-      ],
-      answer: 0,
-      explanation: 'Maximizar el rendimiento (trabajos por hora), minimizar el tiempo de retorno y mantener alta utilización de CPU son las tres metas de los sistemas por lotes. (Nota: en el examen original a) Maximizar el rendimiento y d) Minimizar el tiempo de retorno son metas de lotes; b es de interactivos y c de tiempo real).'
-    },
-    {
-      id: 'p1_180925_t2_3',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 18/09/2025 - Tema 2',
-      points: 5,
-      type: 'multi',
-      prompt: 'Ejercicio 3: ¿Cuáles de las siguientes instrucciones son privilegiadas y deben permitirse SOLO en modo kernel? (Seleccione todas las que correspondan; si es pregunta de opción única en cátedra, recuerde: a, c y d son privilegiadas, solo b se permite en modo usuario):',
-      options: [
-        'a) Deshabilitar todas las interrupciones',
-        'b) Leer el reloj de la hora del día',
-        'c) Establecer el reloj de la hora del día',
-        'd) Cambiar el mapa de memoria',
-        'e) No hay opciones correctas'
-      ],
-      answers: [0, 2, 3],
-      explanation: 'Según Tanenbaum (Problema 16 Cap. 1): Deshabilitar interrupciones (a), Establecer el reloj (c) y Cambiar el mapa de memoria (d) son instrucciones privilegiadas exclusivas de modo kernel; únicamente Leer el reloj de la hora del día (b) puede ejecutarse en modo usuario.'
-    },
-    {
       id: 'p1_180925_t2_4',
       category: '1º Parcial Práctica',
       exam: '1º Parcial 18/09/2025 - Tema 2',
@@ -214,41 +146,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'La secuencia real es AABBAACCBBDDAACBDD (o AAAABBAACCBBDDCBDD según prioridad de arribo en frontera), por lo que ninguna de las secuencias a, b, c coincide → opción d.'
     },
     {
-      id: 'p1_031024_t1_2',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 03/10/2024 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 2: El análisis de un grafo de asignación de recursos sirve para:',
-      options: [
-        'a) Las opciones presentadas no son correctas.',
-        'b) La evitación de interbloqueos.',
-        'c) La prevención de interbloqueos.',
-        'd) La recuperación de interbloqueos.',
-        'e) La detección de interbloqueos.'
-      ],
-      answer: 4,
-      explanation: 'Buscar ciclos/nodos bloqueados en un grafo de asignación de recursos (Algoritmo de detección con un ejemplar de cada tipo) sirve para la DETECCIÓN de interbloqueos (opción e).'
-    },
-    {
-      id: 'p1_031024_t1_4',
-      category: '1º Parcial Práctica',
-      exam: '1º Parcial 03/10/2024 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 4: Cuando existen procesos concurrentes que comparten datos se deben cumplir 4 condiciones para una buena solución de exclusión mutua. El mecanismo de "Alternancia estricta" NO cumple con estas condiciones porque:',
-      options: [
-        'a) Se produce interbloqueo.',
-        'b) Ninguna de las afirmaciones presentadas es correcta.',
-        'c) Ambos procesos pueden ejecutarse en su zona crítica al mismo tiempo.',
-        'd) Ambos procesos pueden ejecutarse en su zona no crítica al mismo tiempo.',
-        'e) Solo un proceso está dentro de su región crítica.',
-        'f) Un proceso es bloqueado por otro que no está en su región crítica.'
-      ],
-      answer: 5,
-      explanation: 'En alternancia estricta (`turno`), cuando un proceso está en su región NO crítica, el otro no puede volver a entrar a su región crítica hasta que el primero le ceda el turno → viola la 3ª condición: "Ningún proceso que se ejecute fuera de su región crítica puede bloquear a otro proceso" (opción f).'
-    },
-    {
       id: 'p1_031024_t1_6',
       category: '1º Parcial Práctica',
       exam: '1º Parcial 03/10/2024 - Tema 1',
@@ -306,22 +203,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
         { label: 'Tiempo de espera del proceso A (ms)', placeholder: 'Ej: 6', accepted: ['6', '6 ms', '6ms'], displayAnswer: '6 ms' }
       ],
       explanation: 'Ejecución SRNT: A(0..1, rem 9), B llega en 1 con tB=2 < 9 y ejecuta 1..3 (termina en 3 → Retorno de B = 3 − 1 = 2 ms). En t=3 llega D(1 < C=3) y ejecuta 3..4; luego C ejecuta 4..7; finalmente A ejecuta 7..16 (termina en 16 → Espera de A = 16 − 0 − 10 = 6 ms).'
-    },
-    {
-      id: 'rec1p_311024_5',
-      category: '1º Parcial Práctica',
-      exam: 'Recuperatorio 1º Examen 31/10/2024 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 5: Según Tanenbaum:\n1. Rendimiento - Maximizar el número de trabajos por hora\n2. Tiempo de retorno - Minimizar el tiempo entre la entrega y la terminación\n3. Proporcionalidad - Cumplir las expectativas de los usuarios\n4. Predictibilidad - Evitar la degradación de la calidad en los sistemas multimedia\n5. Tiempo de respuesta - Responder a las peticiones con rapidez\nSeleccione el par que debe cumplir un sistema cuyo entorno es de procesamiento interactivo:',
-      options: [
-        'a) 2 y 4',
-        'b) 3 y 5',
-        'c) 4 y 1',
-        'd) Las opciones presentadas no son correctas'
-      ],
-      answer: 1,
-      explanation: 'En sistemas interactivos las dos metas de Tanenbaum son: Tiempo de respuesta (5: responder rápido a peticiones) y Proporcionalidad (3: cumplir las expectativas de los usuarios) → 3 y 5 (opción b).'
     },
 
     // =========================================================================
@@ -499,35 +380,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Trazando solicitudes: P1 → R1 → P2 → R3 → P1 forma UN único ciclo (P3 → R3 no cierra otro ciclo porque nadie solicita recursos retenidos por P3, y P4 tampoco solicita nada) → Un Ciclo (opción d).'
     },
     {
-      id: 'p1_280923_5f',
-      category: '1º Parcial Práctica',
-      exam: '1º Examen 28/09/2023 y 26/08/2023',
-      points: 15,
-      type: 'single',
-      prompt: 'Ejercicio (28/09/23 - 5f): En una Organización se tiene una RED para "X" usuarios cableados e "Y" inalámbricos, y una Impresora única de RED para TODOS. El stack de cola de impresión es de "N" servicios. Una vez que la cola se "llena", NO permite que el servicio "n+1" entre a la cola hasta que se libere espacio. Marque la opción que lo describe:',
-      options: [
-        'a) Inanición sin interbloqueo mutuo.',
-        'b) Inanición con bloqueo.',
-        'c) Inanición con interbloqueo mutuo.',
-        'd) Las opciones presentadas no son correctas.'
-      ],
-      answer: 0,
-      explanation: 'Los trabajos en la cola avanzan y se imprimen (no hay interbloqueo mutuo porque la impresora libera lugares continuamente), pero el requerimiento n+1 rechazado afuera puede sufrir postergación indefinida (inanición) si otros usuarios toman la ranura apenas se libera → Inanición sin interbloqueo mutuo (opción a).'
-    },
-    {
-      id: 'p1_280923_6',
-      category: '1º Parcial Práctica',
-      exam: '1º Examen 28/09/2023 y 26/08/2023',
-      points: 15,
-      type: 'blanks',
-      prompt: 'Ejercicio (28/09/23 - 6): Teniendo en cuenta la Planificación Garantizada (con n procesos), complete sus características:',
-      fields: [
-        { label: 'Cada proceso con n procesos activos recibe cerca de ____ de la potencia de CPU', placeholder: 'Ej: 1/n', accepted: ['1/n', '1 / n'], displayAnswer: '1/n' },
-        { label: 'El sistema prioriza los procesos cuya relación (CPU real / CPU prometida) está por ____ de 1 (la menor relación)', placeholder: 'Ej: debajo (p. ej. 0.5)', accepted: ['debajo', 'abajo', 'menor', 'defecto'], displayAnswer: 'debajo (menor relación real/prometida)' }
-      ],
-      explanation: 'En planificación garantizada, si hay n procesos ejecutándose cada uno tiene prometido 1/n de la CPU. El sistema calcula el cociente entre la CPU realmente consumida desde su creación y la CPU prometida, y ejecuta el proceso con la relación más baja (el que está más por debajo de su cuota prometida).'
-    },
-    {
       id: 'p1_260823_1',
       category: '1º Parcial Práctica',
       exam: '1º Examen 28/09/2023 y 26/08/2023',
@@ -556,274 +408,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
         { label: 'Línea 4 (incrementar ranuras llenas)', options: ['a', 'b', 'c', 'd', 'e', 'f'], accepted: ['e', '5', 'up(&llenas)'], displayAnswer: 'e — up(&llenas)' }
       ],
       explanation: 'El productor produce el elemento, hace `down(&vacias)` (a), entra en exclusión mutua con `down(&mutex)` (c), inserta en el buffer, sale con `up(&mutex)` (f) y despierta/incrementa `up(&llenas)` (e).'
-    },
-
-    // =========================================================================
-    // 23. 2º PARCIAL TEORÍA 2022 (10 Preguntas)
-    // =========================================================================
-    {
-      id: 'p2teo_2022_1',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'single',
-      prompt: '1. El driver (o controlador de software) de un dispositivo:',
-      options: [
-        'a. Proporciona una interfaz entre el SSOO y la controladora de dispositivos.',
-        'b. Se puede programar independientemente del entorno (POSIX o WIN32).',
-        'c. Es conveniente que esté en espacio de usuario (en arquitecturas tradicionales monolíticas de escritorio).',
-        'd. Todas las anteriores.'
-      ],
-      answer: 0,
-      explanation: 'Cada driver depende del sistema operativo y proporciona la interfaz entre el SO y la controladora de hardware del dispositivo (opción a).'
-    },
-    {
-      id: 'p2teo_2022_2',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'single',
-      prompt: '2. La fragmentación interna de los archivos se produce porque:',
-      options: [
-        'a. Los bloques de datos están dispersos en el disco.',
-        'b. La información a almacenar no ocupa un bloque completo.',
-        'c. La estructura de nodos índice es muy grande.',
-        'd. Ninguna de las anteriores.'
-      ],
-      answer: 1,
-      explanation: 'El último bloque asignado a un archivo rara vez se llena por completo, desperdiciando el espacio sobrante dentro del bloque → fragmentación interna (opción b).'
-    },
-    {
-      id: 'p2teo_2022_3',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'single',
-      prompt: '3. El número mágico que identifica un archivo ejecutable (o un sistema de archivos) se encuentra en:',
-      options: [
-        'a. El MBR.',
-        'b. El directorio raíz.',
-        'c. En el sector 0 del disco.',
-        'd. Ninguna de las anteriores.'
-      ],
-      answer: 3,
-      explanation: 'Según Tanenbaum (Fig. 4-3a y 4-9), el número mágico que identifica un archivo ejecutable está en el ENCABEZADO del propio archivo (y el del sistema de archivos en el superbloque), no en el MBR, directorio raíz ni sector 0 → Ninguna de las anteriores (opción d).'
-    },
-    {
-      id: 'p2teo_2022_4',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'single',
-      prompt: '4. ¿Cuál es la importancia de contar con una interfaz uniforme para los drivers?',
-      options: [
-        'a. Para que el sistema operativo se adapte a cada driver.',
-        'b. Para que los drivers se adapten al sistema operativo.',
-        'c. Simplifica la lógica de los procesos de usuario, para poder comunicarse con las controladoras.',
-        'd. Ninguna de las anteriores.'
-      ],
-      answer: 1,
-      explanation: 'Según Tanenbaum (Fig. 5-14), definir una interfaz estándar permite que todos los fabricantes escriban sus drivers adaptándose a la interfaz del SO sin tener que modificar el sistema operativo por cada dispositivo nuevo (opción b).'
-    },
-    {
-      id: 'p2teo_2022_5',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'single',
-      prompt: '5. Cuando se realiza un cambio de contexto a raíz de una interrupción:',
-      options: [
-        'a. Se almacena el PSW y el PC del programa en ejecución en una pila.',
-        'b. El programa en ejecución pasa a la cola de listos (si es expropiado).',
-        'c. Se deshabilita el bus.',
-        'd. Todas las anteriores.'
-      ],
-      answer: 0,
-      explanation: 'Al producirse una interrupción, el hardware resguarda inmediatamente el contador de programa (PC) y la palabra de estado del programa (PSW) en la pila antes de saltar al vector de interrupción (opción a; el bus NO se deshabilita).'
-    },
-    {
-      id: 'p2teo_2022_6',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'vf',
-      prompt: '6. El término virtualización describe ampliamente la separación de un pedido de servicio del ambiente físico donde ese servicio es ejecutado.',
-      answer: 'V',
-      explanation: 'Verdadero. La virtualización abstrae y desacopla los servicios/recursos lógicos del hardware físico subyacente.'
-    },
-    {
-      id: 'p2teo_2022_7',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'vf',
-      prompt: '7. El uso de VMs complica mantener configuraciones tolerantes a fallos sin tiempos de inactividad.',
-      answer: 'F',
-      explanation: 'Falso. Al contrario, las máquinas virtuales FACILITAN la migración en vivo, replicación y tolerancia a fallos sin tiempos de inactividad.'
-    },
-    {
-      id: 'p2teo_2022_8',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'vf',
-      prompt: '8. Cuando se utiliza virtualización, se pueden crear VMs desde imágenes pre-creadas o desde snapshots.',
-      answer: 'V',
-      explanation: 'Verdadero. Los hipervisores permiten clonar, aprovisionar y restaurar máquinas virtuales rápidamente a partir de plantillas/imágenes o instantáneas (snapshots).'
-    },
-    {
-      id: 'p2teo_2022_9',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'vf',
-      prompt: '9. Un Sistema Distribuido consiste en una colección de computadoras autónomas enlazadas por una red y equipadas con un sistema de software distribuido que luce a los usuarios como si fuera un sistema único y centralizado.',
-      answer: 'V',
-      explanation: 'Verdadero. Es la definición clásica de sistema distribuido de Tanenbaum (imagen de sistema único o single-system image).'
-    },
-    {
-      id: 'p2teo_2022_10',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2022',
-      points: 10,
-      type: 'vf',
-      prompt: '10. Integridad de los datos significa que los usuarios sin autorización no deben ser capaces de modificar datos sin el permiso del propietario.',
-      answer: 'V',
-      explanation: 'Verdadero. La integridad garantiza que los datos no sean alterados ni destruidos sin autorización (mientras que la confidencialidad protege contra lectura no autorizada).'
-    },
-
-    // =========================================================================
-    // 24. 2º PARCIAL TEORÍA 2024 (10 Preguntas)
-    // =========================================================================
-    {
-      id: 'p2teo_2024_1',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'single',
-      prompt: '1. Respecto al espacio de direcciones...:',
-      options: [
-        'a. Crea un tipo de memoria abstracta para que los programas vivan ahí.',
-        'b. Un espacio de direcciones (address space) es el conjunto de direcciones que puede utilizar un proceso para direccionar la memoria.',
-        'c. Cada proceso tiene su propio espacio de direcciones, independiente de los que pertenecen a otros procesos.',
-        'd. Todas las opciones anteriores son correctas.'
-      ],
-      answer: 3,
-      explanation: 'Las tres afirmaciones son frases textuales de Tanenbaum (Sección 3.2.1: La noción de un espacio de direcciones) → Todas las opciones anteriores son correctas (d).'
-    },
-    {
-      id: 'p2teo_2024_2',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'single',
-      prompt: '2. La fragmentación interna de los archivos se produce porque:',
-      options: [
-        'a. Los bloques de datos están dispersos en el disco.',
-        'b. La información a almacenar no ocupa un bloque completo.',
-        'c. La estructura de nodos índice es muy grande.',
-        'd. Ninguna de las opciones es correcta.'
-      ],
-      answer: 1,
-      explanation: 'Se desperdicia el espacio sobrante en el último bloque de disco asignado al archivo (opción b).'
-    },
-    {
-      id: 'p2teo_2024_3',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'single',
-      prompt: '3. La memoria virtual...:',
-      options: [
-        'a. Permite que los programas se ejecuten incluso cuando solo se encuentran en forma parcial en la memoria.',
-        'b. Se encuentra en el directorio raíz.',
-        'c. Se encuentra en el sector 0 del disco.',
-        'd. Ninguna de las opciones es correcta.'
-      ],
-      answer: 0,
-      explanation: 'Cita textual de Tanenbaum (Sección 3.2.2 / 3.3): permite que los programas se ejecuten incluso cuando solo se encuentran parcialmente en memoria principal (opción a).'
-    },
-    {
-      id: 'p2teo_2024_4',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'single',
-      prompt: '4. ¿Cuál es la importancia de contar con una interfaz uniforme para los drivers?',
-      options: [
-        'a. Para que el sistema operativo se adapte a cada driver.',
-        'b. Para que los drivers se adapten al sistema operativo.',
-        'c. Simplifica la lógica de los procesos de usuario, para poder comunicarse con las controladoras.',
-        'd. Ninguna de las anteriores.'
-      ],
-      answer: 1,
-      explanation: 'Permite que cada nuevo driver se adapte a la interfaz definida por el SO sin modificar el kernel (opción b).'
-    },
-    {
-      id: 'p2teo_2024_5',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'single',
-      prompt: '5. Requerimientos esenciales para el almacenamiento de información a largo plazo:',
-      options: [
-        'a. Debe ser posible almacenar una cantidad muy grande de información.',
-        'b. La información debe sobrevivir a la terminación del proceso que la utilice.',
-        'c. Múltiples procesos deben ser capaces de acceder a la información concurrentemente.',
-        'd. Todas las opciones son correctas.'
-      ],
-      answer: 3,
-      explanation: 'Son exactamente los tres requerimientos esenciales del inicio del Capítulo 4 (Sistemas de Archivos) de Tanenbaum → Todas las opciones son correctas (d).'
-    },
-    {
-      id: 'p2teo_2024_6',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'vf',
-      prompt: '6. La memoria física puede no ser lo suficientemente grande para almacenar todos los procesos.',
-      answer: 'V',
-      explanation: 'Verdadero (Sección 3.2.2 de Tanenbaum: esto motiva el intercambio/swapping y la memoria virtual).'
-    },
-    {
-      id: 'p2teo_2024_7',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'vf',
-      prompt: '7. En términos generales, hay dos formas de llevar el registro del uso de la memoria: mapas de bits o listas libres.',
-      answer: 'V',
-      explanation: 'Verdadero. Frase textual de Tanenbaum (Sección 3.2.3: Administración de memoria libre: mapas de bits y listas enlazadas/libres).'
-    },
-    {
-      id: 'p2teo_2024_8',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'vf',
-      prompt: '8. Los procesos (hilos), espacios de direcciones y archivos son los conceptos más importantes en un Sistema Operativo.',
-      answer: 'V',
-      explanation: 'Verdadero. Frase textual de Tanenbaum (Cap. 4, pág. 256: "las abstracciones de los procesos (e hilos), espacios de direcciones y archivos son los conceptos más importantes en relación con los sistemas operativos").'
-    },
-    {
-      id: 'p2teo_2024_9',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'vf',
-      prompt: '9. En Unix, la extensión del archivo es solo una convención; el compilador de C es la excepción (exige por ejemplo .c).',
-      answer: 'V',
-      explanation: 'Verdadero. En UNIX el SO no impone significado a las extensiones (son convenciones), aunque programas como el compilador de C verifican que los archivos terminen en `.c` / `.o` (Sección 4.1.1 de Tanenbaum).'
-    },
-    {
-      id: 'p2teo_2024_10',
-      category: '2º Parcial Teoría',
-      exam: '2º Parcial Teoría 2024',
-      points: 10,
-      type: 'vf',
-      prompt: '10. Un dispositivo de carácter envía o acepta un flujo de caracteres, sin importar la estructura del bloque.',
-      answer: 'V',
-      explanation: 'Verdadero. Definición textual de Tanenbaum (Sección 5.1.1: Dispositivos de E/S).'
     }
   ];
 

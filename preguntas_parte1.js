@@ -1,215 +1,31 @@
-// Parte 1 del Banco de Preguntas: Globales / Integradores y 2º Parcial Práctica (Carpeta pagina)
+// Parte 1 del Banco de Preguntas: Globales / Integradores y 2º Parcial Práctica (Solo ejercicios prácticos)
 window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
 
 (function () {
   const D = window.DIAGRAMAS;
   const P1 = [
     // =========================================================================
-    // 1. INTEGRADOR 16/11/2023 - TEMA 1 (10 V/F)
+    // 1. INTEGRADOR 16/11/2023 (Ejercicios Prácticos de Cálculo de Disco)
     // =========================================================================
-    {
-      id: 'int_161123_t1_1',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Cuando una página que debe sustituirse está clasificada como de clase 1, significa que no ha sido referenciada y ha sido modificada.',
-      answer: 'V',
-      explanation: 'En el algoritmo NRU las clases son: Clase 0 (R=0, M=0), Clase 1 (R=0, M=1: no referenciada, modificada), Clase 2 (R=1, M=0) y Clase 3 (R=1, M=1).'
-    },
-    {
-      id: 'int_161123_t1_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Para resolver el problema del productor-consumidor son necesarios dos semáforos binarios.',
-      answer: 'F',
-      explanation: 'Falso. Se necesitan TRES semáforos: 1 semáforo binario (mutex, para exclusión mutua) y 2 semáforos contadores/generales (vacías y llenas).'
-    },
-    {
-      id: 'int_161123_t1_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'En Linux, el hard link o enlace duro permite asignarle otro nombre a un archivo; pero se debe tener en cuenta que compartirán el mismo i-node.',
-      answer: 'V',
-      explanation: 'Verdadero. Un enlace duro crea una nueva entrada de directorio que apunta exactamente al mismo número de nodo-i e incrementa su contador de enlaces.'
-    },
-    {
-      id: 'int_161123_t1_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Apropiación, es el acto de interrumpir temporalmente una tarea que está llevando a cabo en el sistema, con la intención de reanudar la tarea posteriormente, y sin la cooperación del usuario.',
-      answer: 'V',
-      explanation: 'Verdadero. La planificación apropiativa (expropiativa) suspende temporalmente al proceso en ejecución sin requerir su cooperación para reanudarlo más adelante.'
-    },
     {
       id: 'int_161123_t1_5',
       category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
+      exam: 'Integrador 16/11/2023 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: 'El tiempo medio de lectura o escritura de un sector de 512 bytes en un disco típico que gira a 5400 rpm es de 27 ms; considerando que el tiempo medio de posicionado anunciado para este disco es de 18 ms, la velocidad de transferencia es de 5 MB/seg y la sobrecarga debida al controlador es de 3 ms. Suponga que el disco está desocupado de forma que no hay tiempo de espera. (tenga en cuenta precisión de decimales).',
+      prompt: '[Tema 1] El tiempo medio de lectura o escritura de un sector de 512 bytes en un disco típico que gira a 5400 rpm es de 27 ms; considerando que el tiempo medio de posicionado anunciado para este disco es de 18 ms, la velocidad de transferencia es de 5 MB/seg y la sobrecarga debida al controlador es de 3 ms. Suponga que el disco está desocupado de forma que no hay tiempo de espera. (tenga en cuenta precisión de decimales).',
       answer: 'F',
       explanation: 'Falso. Latencia rotacional media = 0,5 × (60 / 5400) × 1000 = 5,56 ms. Transferencia = 512 B / (5 MB/s) ≈ 0,10 ms. Total = 18 + 5,56 + 0,10 + 3 = 26,66 ms (no es 27 ms considerando precisión de decimales).'
     },
     {
-      id: 'int_161123_t1_6',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Un fallo de página se produce cuando el bit de presente/ausente es uno.',
-      answer: 'F',
-      explanation: 'Falso. El fallo de página ocurre cuando el bit presente/ausente es CERO (0 = página ausente en RAM). Cuando vale 1 la página está en memoria.'
-    },
-    {
-      id: 'int_161123_t1_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'El algoritmo de Round Robin, y el SRTN son algunos algoritmos de planificación de procesos con política no expropiativo.',
-      answer: 'F',
-      explanation: 'Falso. Tanto Round Robin (por fin de quantum) como SRTN (por llegada de proceso con menor tiempo restante) son algoritmos EXPROPIATIVOS (apropiativos).'
-    },
-    {
-      id: 'int_161123_t1_8',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'En la condición de contención y espera, el recurso es retenido por el proceso y solo él puede liberarlo.',
-      answer: 'F',
-      explanation: 'Falso. Esa definición corresponde a la condición de NO APROPIACIÓN (no preemption). Contención y espera establece que un proceso que retiene recursos puede solicitar nuevos recursos.'
-    },
-    {
-      id: 'int_161123_t1_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Las pistas se organizan verticalmente en clúster.',
-      answer: 'F',
-      explanation: 'Falso. Las pistas ubicadas en una misma posición radial apiladas verticalmente forman un CILINDRO (no un clúster).'
-    },
-    {
-      id: 'int_161123_t1_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Considerando un algoritmo de planificación apropiativo, la transición entre un estado de ejecución al estado de listo se produce cuando se termina el time slice del proceso en estado de ejecución y cuando el proceso espera por un recurso.',
-      answer: 'F',
-      explanation: 'Falso. Cuando el proceso espera por un recurso pasa de Ejecución a BLOQUEADO (no a Listo). A Listo pasa cuando termina su time slice.'
-    },
-
-    // =========================================================================
-    // 2. INTEGRADOR 16/11/2023 - TEMA 2 (10 V/F)
-    // =========================================================================
-    {
-      id: 'int_161123_t2_1',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Cuando una página que debe sustituirse está clasificada como de clase 1, significa que no ha sido referenciada y ha sido modificada.',
-      answer: 'V',
-      explanation: 'Verdadero. Clase 1 en NRU corresponde a R = 0 (no referenciada) y M = 1 (modificada).'
-    },
-    {
-      id: 'int_161123_t2_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Para resolver el problema del productor-consumidor son necesarios tres semáforos.',
-      answer: 'V',
-      explanation: 'Verdadero. Se utilizan 3 semáforos: mutex (binario), vacías (contador inicializado en N) y llenas (contador inicializado en 0).'
-    },
-    {
-      id: 'int_161123_t2_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'En Linux, el hard link o enlace duro permite asignarle otro nombre a un archivo; pero se debe tener en cuenta que compartirán el mismo i-node.',
-      answer: 'V',
-      explanation: 'Verdadero. Todos los enlaces duros de un archivo apuntan al mismo i-nodo.'
-    },
-    {
-      id: 'int_161123_t2_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Apropiación, es el acto de interrumpir temporalmente una tarea que está llevando a cabo en el sistema, sin intención de reanudar la tarea posteriormente, y con la cooperación del usuario.',
-      answer: 'F',
-      explanation: 'Falso. La apropiación se realiza CON intención de reanudar la tarea posteriormente y SIN requerir la cooperación del usuario/proceso.'
-    },
-    {
       id: 'int_161123_t2_5',
       category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
+      exam: 'Integrador 16/11/2023 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: 'Se dice que el tiempo medio de lectura o escritura de un disco es de 12,87 ms de un sector de 512 Bytes en un disco típico que gira a 7200 rpm; con: Tiempo medio de posicionado anunciado por el fabricante para este disco es de 6,8 ms; la velocidad de transferencia de 19 MB/s y la sobrecarga debida al controlador es de 2 ms. Suponga que el disco está desocupado de forma que no hay tiempo de espera alguno. (tenga en cuenta precisión de decimales).',
+      prompt: '[Tema 2] Se dice que el tiempo medio de lectura o escritura de un disco es de 12,87 ms de un sector de 512 Bytes en un disco típico que gira a 7200 rpm; con: Tiempo medio de posicionado anunciado por el fabricante para este disco es de 6,8 ms; la velocidad de transferencia de 19 MB/s y la sobrecarga debida al controlador es de 2 ms. Suponga que el disco está desocupado de forma que no hay tiempo de espera alguno. (tenga en cuenta precisión de decimales).',
       answer: 'F',
       explanation: 'Falso. Latencia rotacional media = 0,5 × (60 / 7200) × 1000 = 4,17 ms. Transferencia = 512 B / 19 MB/s ≈ 0,03 ms. Total = 6,8 + 4,17 + 0,03 + 2 = 12,99 ms (≈ 13,00 ms), no 12,87 ms.'
-    },
-    {
-      id: 'int_161123_t2_6',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Un fallo de página se produce cuando el bit de presente/ausente es cero.',
-      answer: 'V',
-      explanation: 'Verdadero. Cuando el bit presente/ausente vale 0, la página no está en memoria principal y la MMU genera un trap de fallo de página.'
-    },
-    {
-      id: 'int_161123_t2_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'El algoritmo de Round Robin, y el SRTN son algunos algoritmos de planificación de procesos con política expropiativo.',
-      answer: 'V',
-      explanation: 'Verdadero. Ambos permiten desalojar la CPU (por quantum agotado en RR o por proceso entrante más corto en SRTN).'
-    },
-    {
-      id: 'int_161123_t2_8',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'En la condición de contención y espera, el recurso es retenido por el proceso y solo él puede liberarlo.',
-      answer: 'F',
-      explanation: 'Falso. Que solo el proceso que retiene el recurso pueda liberarlo explícitamente define la condición de NO APROPIACIÓN, no la de contención y espera.'
-    },
-    {
-      id: 'int_161123_t2_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Los sectores se organizan verticalmente en cilindros.',
-      answer: 'F',
-      explanation: 'Falso. Son las PISTAS (no los sectores) de igual radio las que se apilan verticalmente formando cilindros.'
-    },
-    {
-      id: 'int_161123_t2_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 16/11/2023 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Considerando un algoritmo de planificación apropiativo, la transición entre un estado de ejecución al estado de listo se produce cuando se termina el time slice del proceso en estado de ejecución.',
-      answer: 'V',
-      explanation: 'Verdadero. Al expirar su quantum (time slice), el planificador expropia la CPU y pasa el proceso de Ejecución a Listo.'
     },
 
     // =========================================================================
@@ -261,16 +77,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Secuencia paso a paso con q=1 (nuevo entra antes del saliente):\nt=0..1: A (rem 3) cola:[A]\nt=1..2: A (rem 2), llega B en t=2 → cola:[B, A]\nt=2..3: B (rem 4), llega C en t=3 → cola:[A, C, B]\nt=3..4: A (rem 1), llega D en t=4 → cola:[C, B, D, A]\nt=4..5: C (termina en 5) → cola:[B, D, A]\nt=5..6: B (rem 3) → cola:[D, A, B]\nt=6..7: D (rem 2) → cola:[A, B, D]\nt=7..8: A (rem 0 → ¡A termina en t = 8!).'
     },
     {
-      id: 'int_031024_t2_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 03/10/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: 'Ejercicio 4: El algoritmo de planificación por sorteo (lottery scheduling) es apropiativo.',
-      answer: 'V',
-      explanation: 'Verdadero. Según Tanenbaum, la planificación por sorteo puede ser apropiativa o no, pero en sistemas interactivos opera realizando sorteos varias veces por segundo (p. ej. 50 veces/seg), permitiendo expropiar la CPU al ganador del nuevo sorteo; además los procesos cooperativos pueden intercambiar boletos.'
-    },
-    {
       id: 'int_031024_t2_5',
       category: 'Globales / Integradores',
       exam: 'Integrador 03/10/2024 - Tema 2',
@@ -288,74 +94,17 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       ],
       explanation: 'Primero sincroniza el acceso al plato con el semáforo general inicializado en 3: wait(puedo_comer) → comer() → signal(puedo_comer). Luego sincroniza la exclusión mutua de la rueda con el semáforo binario inicializado en 1: wait(rueda) → montar_en_rueda() → signal(rueda).'
     },
-    {
-      id: 'int_031024_t2_6',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 03/10/2024 - Tema 2',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 6: Cuando decide ejecutar un proceso por lotes lo hace porque:',
-      options: [
-        'a) Contiene varios procesos distintos que se ejecutarán simultáneamente.',
-        'b) Se ejecutará sin la necesidad de la interacción con ninguna persona.',
-        'c) Será capaz de utilizar más de una CPU y/o Core simultáneamente.',
-        'd) Se ejecutará en modo foreground (primer plano) en lugar de en modo background (segundo plano).',
-        'e) Ninguna de las anteriores.'
-      ],
-      answer: 1,
-      explanation: 'Los procesos por lotes (batch) son trabajos rutinarios (nóminas, respaldos, reportes periódicos) que se ejecutan de principio a fin sin requerir interacción del usuario.'
-    },
 
     // =========================================================================
-    // 4. INTEGRADOR 15/11/2024 - TEMA 1 (Preguntas propias + Gantt + Tabla 1)
+    // 4. INTEGRADOR 15/11/2024 (Ejercicios Prácticos: Gantt y Tabla de Páginas)
     // =========================================================================
-    {
-      id: 'int_151124_t1_1',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '1. Cuando una página que debe sustituirse está clasificada como de clase 1, significa que no ha sido referenciada y ha sido modificada.',
-      answer: 'V',
-      explanation: 'Verdadero (Clase 1 en NRU: R=0, M=1).'
-    },
-    {
-      id: 'int_151124_t1_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '2. Para resolver el problema del productor-consumidor son necesarios dos semáforos binarios.',
-      answer: 'F',
-      explanation: 'Falso. Son necesarios tres semáforos: uno binario (mutex) y dos contadores (vacías y llenas).'
-    },
-    {
-      id: 'int_151124_t1_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '3. En Linux, el hard link o enlace duro permite asignarle otro nombre a un archivo; pero se debe tener en cuenta que compartirán el mismo i-nodo.',
-      answer: 'V',
-      explanation: 'Verdadero. Ambos nombres apuntan al mismo i-nodo.'
-    },
-    {
-      id: 'int_151124_t1_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '4. Apropiación, es el acto de interrumpir temporalmente una tarea que está llevando a cabo en el sistema, con la intención de reanudar la tarea posteriormente, y sin la cooperación del usuario.',
-      answer: 'V',
-      explanation: 'Verdadero.'
-    },
     {
       id: 'int_151124_t1_5',
       category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
+      exam: 'Integrador 15/11/2024 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: '5. De acuerdo a la siguiente distribución de procesos, la implementación corresponde a Round Robin con q = 4.',
+      prompt: '[Tema 1 - Act. 5] De acuerdo a la siguiente distribución de procesos, la implementación corresponde a Round Robin con q = 4.',
       mediaHtml: D.GANTT_15_11_2024,
       answer: 'F',
       explanation: 'Falso. En el diagrama P1 ejecuta solo 2 unidades (0..2) y es expropiado cuando llega P2 (duración 4 < 5 restantes de P1); luego en t=4 P2 es expropiado por P3 (duración 1 < 2 restantes de P2). Eso corresponde a SRTN, NO a Round Robin con q=4.'
@@ -363,105 +112,21 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
     {
       id: 'int_151124_t1_6',
       category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
+      exam: 'Integrador 15/11/2024 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: '6. Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 30026 (base 10).',
+      prompt: '[Tema 1 - Act. 6] Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 30026 (base 10).',
       mediaHtml: D.TABLA_PAG_15_11_2024_T1,
       answer: 'F',
       explanation: 'Falso. Página de 2 KB = 2048 bytes = 2^11 → 11 bits de desplazamiento. Separando 01011 | 10101000111: página = 01011₂ = 11₁₀ (marco 14 en Tabla 1) y offset = 10101000111₂ = 1351₁₀. Dirección física = 14 × 2048 + 1351 = 28672 + 1351 = 30023₁₀ (no 30026).'
     },
     {
-      id: 'int_151124_t1_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '7. El algoritmo de Round Robin, y el SRTN son algunos algoritmos de planificación de procesos con política no expropiativo.',
-      answer: 'F',
-      explanation: 'Falso. Ambos son expropiativos.'
-    },
-    {
-      id: 'int_151124_t1_8',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '8. En la condición de contención y espera, el recurso es retenido por el proceso y solo él puede liberarlo.',
-      answer: 'F',
-      explanation: 'Falso. Esa definición pertenece a la condición de No Apropiación.'
-    },
-    {
-      id: 'int_151124_t1_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '9. Las pistas se organizan verticalmente en clúster.',
-      answer: 'F',
-      explanation: 'Falso. Las pistas se organizan verticalmente en cilindros.'
-    },
-    {
-      id: 'int_151124_t1_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: '10. El algoritmo de reemplazo de páginas óptimo tiene como finalidad retirar la página que vaya a ser referenciada más tarde; por ejemplo, si hay una página A que será usada dentro de 10000 instrucciones y una página B que será usada dentro de 2800 instrucciones, se debería eliminar de la memoria la página A. Como se puede deducir, para esto el sistema operativo debería ver en cuánto tiempo será usada cada página en memoria y elegir la que está más distante.',
-      answer: 'V',
-      explanation: 'Verdadero. El algoritmo óptimo reemplaza la página cuya próxima referencia ocurrirá más lejos en el futuro (aunque no es implementable en la práctica porque el SO no conoce las referencias futuras).'
-    },
-
-    // =========================================================================
-    // 5. INTEGRADOR 15/11/2024 - TEMA 2 (10 V/F)
-    // =========================================================================
-    {
-      id: 'int_151124_t2_1',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '1. Cuando una página que debe sustituirse está clasificada como de clase 1, significa que ha sido referenciada y ha sido modificada.',
-      answer: 'F',
-      explanation: 'Falso. Referenciada y modificada (R=1, M=1) es Clase 3. La Clase 1 es NO referenciada y modificada (R=0, M=1).'
-    },
-    {
-      id: 'int_151124_t2_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '2. Para resolver el problema del productor-consumidor son necesarios tres semáforos.',
-      answer: 'V',
-      explanation: 'Verdadero (mutex, vacías y llenas).'
-    },
-    {
-      id: 'int_151124_t2_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '3. En Linux, el hard link o enlace duro permite asignarle otro nombre a un archivo; pero se debe tener en cuenta que no comparten el mismo i-nodo.',
-      answer: 'F',
-      explanation: 'Falso. Los enlaces duros SÍ comparten exactamente el mismo i-nodo.'
-    },
-    {
-      id: 'int_151124_t2_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '4. Apropiación, es el acto de interrumpir temporalmente una tarea que está llevando a cabo en el sistema a través de los algoritmos de planificación, sin intención de reanudar la tarea posteriormente, y con la cooperación del usuario.',
-      answer: 'F',
-      explanation: 'Falso. Se interrumpe CON intención de reanudarla y SIN cooperación del usuario.'
-    },
-    {
       id: 'int_151124_t2_5',
       category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
+      exam: 'Integrador 15/11/2024 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: '5. De acuerdo a la siguiente distribución de procesos, la implementación corresponde a SRNT.',
+      prompt: '[Tema 2 - Act. 5] De acuerdo a la siguiente distribución de procesos, la implementación corresponde a SRNT.',
       mediaHtml: D.GANTT_15_11_2024,
       answer: 'V',
       explanation: 'Verdadero. En cada llegada se compara el tiempo restante: en t=2 P2(4) < P1(5), en t=4 P3(1) < P2(2), luego termina P2(5..7), P4(7..11) y P1(11..16). Es exactamente SRTN.'
@@ -469,159 +134,24 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
     {
       id: 'int_151124_t2_6',
       category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
+      exam: 'Integrador 15/11/2024 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: '6. Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 300023 (base 10).',
+      prompt: '[Tema 2 - Act. 6] Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 300023 (base 10).',
       mediaHtml: D.TABLA_PAG_15_11_2024_T2,
       answer: 'F',
       explanation: 'Falso (¡ojo al cero extra!). El cálculo da 14 × 2048 + 1351 = 30.023, mientras que el enunciado dice 300.023.'
     },
     {
-      id: 'int_151124_t2_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '7. El algoritmo de Round Robin, y el SRTN son algunos de los algoritmos de planificación de procesos con política expropiativo.',
-      answer: 'V',
-      explanation: 'Verdadero.'
-    },
-    {
-      id: 'int_151124_t2_8',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '8. En la condición de contención y espera, los recursos otorgados previamente no se pueden quitar a un proceso por la fuerza. Deben ser liberados de manera explícita por el proceso que los contiene.',
-      answer: 'F',
-      explanation: 'Falso. Ese enunciado define la condición de NO APROPIACIÓN, no la de contención y espera.'
-    },
-    {
-      id: 'int_151124_t2_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '9. Los sectores se organizan verticalmente en cilindros.',
-      answer: 'F',
-      explanation: 'Falso. Las pistas se organizan verticalmente en cilindros.'
-    },
-    {
-      id: 'int_151124_t2_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 2',
-      points: 10,
-      type: 'vf',
-      prompt: '10. El algoritmo de reemplazo de páginas: no usadas recientemente (NRU) favorece a las páginas que fueron usadas recientemente. Funciona de la siguiente manera: cuando una página es referenciada, fija el bit de referencia para esa página. Similarmente, cuando una página es modificada, fija su bit de modificación. Usualmente estas operaciones son realizadas por el hardware, aunque puede hacerse también por software. En un tiempo fijo, el sistema operativo pone en 0 los bits de referencia de todas las páginas, de modo que las páginas con su bit de referencia en 1 son las que fueron referenciadas dentro del último intervalo de reloj. Cuando una página debe ser reemplazada, el sistema operativo divide las páginas en distintas categorías.',
-      answer: 'V',
-      explanation: 'Verdadero. Describe fielmente el funcionamiento de los bits R y M y las 4 categorías del algoritmo NRU.'
-    },
-
-    // =========================================================================
-    // 6. INTEGRADOR 15/11/2024 - TEMA 3 (10 V/F)
-    // =========================================================================
-    {
-      id: 'int_151124_t3_1',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '1. Cuando una página que debe sustituirse está clasificada como de clase 2, significa que ha sido referenciada y ha sido modificada.',
-      answer: 'F',
-      explanation: 'Falso. Clase 2 significa que ha sido referenciada y NO ha sido modificada (R=1, M=0).'
-    },
-    {
-      id: 'int_151124_t3_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '2. En un monitor no pueden estar activos más de un proceso en cualquier instante y por ser una construcción del lenguaje esto asegura la exclusión mutua.',
-      answer: 'V',
-      explanation: 'Verdadero. El compilador garantiza que solo un proceso esté activo dentro del monitor en todo momento.'
-    },
-    {
-      id: 'int_151124_t3_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '3. En Linux, el hard link o enlace duro permite asignarle otro nombre a un archivo; pero se debe tener en cuenta que no comparten el mismo i-nodo.',
-      answer: 'F',
-      explanation: 'Falso. Los enlaces duros comparten el mismo i-nodo.'
-    },
-    {
-      id: 'int_151124_t3_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '4. Apropiación, es el acto de interrumpir temporalmente una tarea que está llevando a cabo en el sistema a través de los algoritmos de planificación, sin intención de reanudar la tarea posteriormente, y con la cooperación del usuario.',
-      answer: 'F',
-      explanation: 'Falso.'
-    },
-    {
-      id: 'int_151124_t3_5',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '5. De acuerdo a la siguiente distribución de procesos, la implementación corresponde a un Round Robin con q = 4.',
-      mediaHtml: D.GANTT_15_11_2024,
-      answer: 'F',
-      explanation: 'Falso. La grilla representa SRTN, no Round Robin con q=4.'
-    },
-    {
       id: 'int_151124_t3_6',
       category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
+      exam: 'Integrador 15/11/2024 (Práctica)',
       points: 10,
       type: 'vf',
-      prompt: '6. Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 30023 (base 10).',
+      prompt: '[Tema 3 - Act. 6] Con la información de la Tabla 1, la dirección física expresada en decimal considerando que: a) el tamaño de la página es de 2 kBytes, y b) la dirección virtual es 0101110101000111, es: 30023 (base 10).',
       mediaHtml: D.TABLA_PAG_15_11_2024_T3,
       answer: 'V',
       explanation: 'Verdadero. Página = 01011₂ = 11 → Marco 14. Offset = 10101000111₂ = 1351. Dirección física = 14 × 2048 + 1351 = 30023₁₀.'
-    },
-    {
-      id: 'int_151124_t3_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '7. El algoritmo de FIFO, y el SJF son algoritmos de planificación de procesos con política no expropiativo.',
-      answer: 'V',
-      explanation: 'Verdadero. Tanto FIFO (FCFS) como SJF dejan ejecutar al proceso hasta que termine su ráfaga o se bloquee (no expropiativos).'
-    },
-    {
-      id: 'int_151124_t3_8',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '8. En la condición de exclusión mutua, cada recurso se asigna en un momento dado a sólo un proceso, o está disponible.',
-      answer: 'V',
-      explanation: 'Verdadero. Es la definición exacta de la primera condición de Coffman en Tanenbaum.'
-    },
-    {
-      id: 'int_151124_t3_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '9. En el método de asignación contigua del espacio de disco, sólo es necesario la dirección del primer bloque y la longitud del archivo.',
-      answer: 'V',
-      explanation: 'Verdadero. En asignación contigua alcanza con registrar en el directorio la dirección del bloque inicial y el número de bloques (longitud).'
-    },
-    {
-      id: 'int_151124_t3_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 15/11/2024 - Tema 3',
-      points: 10,
-      type: 'vf',
-      prompt: '10. El algoritmo de reemplazo de páginas NRU elimina una página al azar de la clase de menor numeración que no esté vacía. En este algoritmo está implícita la idea de que es mejor eliminar una página modificada a la que no se haya hecho referencia en al menos un pulso de reloj que una página limpia de uso frecuente.',
-      answer: 'V',
-      explanation: 'Verdadero. Cita textual de Tanenbaum (Cap. 3, sección 3.4.2): prefiere desalojar Clase 1 (R=0, M=1) antes que Clase 2 (R=1, M=0).'
     },
 
     // =========================================================================
@@ -640,16 +170,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Memoria física = 524.288 marcos × 1024 bytes/marco = 2^19 × 2^10 = 2^29 bytes → se necesitan 29 bits para direccionar la RAM.'
     },
     {
-      id: 'int_131125_t1_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 1',
-      points: 10,
-      type: 'vf',
-      prompt: 'Actividad 2: En un monitor no pueden estar activos más de un proceso en cualquier instante y por ser una construcción del lenguaje esto asegura la exclusión mutua.',
-      answer: 'V',
-      explanation: 'Verdadero.'
-    },
-    {
       id: 'int_131125_t1_3',
       category: 'Globales / Integradores',
       exam: 'Integrador 13/11/2025 - Tema 1',
@@ -660,34 +180,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       accepted: ['00 04', '0004', '0004h', '0x0400', '0400', '0400h', '04 00', '00h 04h'],
       displayAnswer: '00 04 (en little-endian en el BPB) / 0x0400',
       explanation: '1024 en decimal equivale a 0x0400 en hexadecimal (2 bytes). Como el sector de arranque de FAT32 almacena enteros en formato little-endian (offset 0x0B-0x0C), en disco se escribe la secuencia de bytes 00 04 (valor 0x0400).'
-    },
-    {
-      id: 'int_131125_t1_4',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Actividad 4: Con el esquema de gestión de memoria mediante particiones fijas se produce:',
-      options: [
-        'a) Fragmentación interna.',
-        'b) Fragmentación externa.',
-        'c) Fragmentación de tablas.',
-        'd) No existe fragmentación.'
-      ],
-      answer: 0,
-      explanation: 'En particiones fijas, cuando un proceso es más pequeño que la partición asignada, el espacio sobrante dentro de la partición se desperdicia → fragmentación interna.'
-    },
-    {
-      id: 'int_131125_t1_5',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 1',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 5: Coffman mostró que deben aplicarse cuatro condiciones para un interbloqueo (de recursos), ¿cuál es la condición que explica que los procesos que actualmente contienen recursos que se les otorgaron antes pueden solicitar nuevos recursos?',
-      placeholder: 'Ej: Contención y espera',
-      accepted: ['contencion y espera', 'contencionyespera', 'retencion y espera', 'posesion y espera', 'hold and wait'],
-      displayAnswer: 'Contención y espera (Hold and Wait)',
-      explanation: 'Es la condición de Contención y espera (también traducida como retención y espera o posesión y espera).'
     },
     {
       id: 'int_131125_t1_6',
@@ -830,23 +322,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'a) Se produce fragmentación interna en el último bloque lógico asignado.\nb) 4500 bytes requiere ⌈4500 / 4096⌉ = 2 bloques lógicos = 8192 bytes. Desperdicio = 8192 − 4500 = 3692 bytes.'
     },
     {
-      id: 'int_131125_t2_6',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 2',
-      points: 10,
-      type: 'single',
-      prompt: 'Actividad 6: El tiempo que tarda el cabezal del disco en situarse sobre la pista solicitada es el:',
-      options: [
-        'a) Tiempo de posicionamiento (búsqueda / seek).',
-        'b) Tiempo de latencia.',
-        'c) Tiempo de transferencia.',
-        'd) La suma de los tiempos anteriores.',
-        'e) Ninguna de las anteriores.'
-      ],
-      answer: 0,
-      explanation: 'El desplazamiento radial del brazo/cabezal hasta alcanzar el cilindro/pista deseado es el tiempo de posicionamiento o búsqueda (seek time).'
-    },
-    {
       id: 'int_131125_t2_7',
       category: 'Globales / Integradores',
       exam: 'Integrador 13/11/2025 - Tema 2',
@@ -912,38 +387,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: '131.072 marcos = 2^17 marcos. Tamaño de marco = 2048 bytes = 2^11 bytes. Total RAM = 2^17 × 2^11 = 2^28 bytes → 28 bits.'
     },
     {
-      id: 'int_prac_2',
-      category: 'Globales / Integradores',
-      exam: 'Integrador - Tema Práctico',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 2: ¿Cuál es la propiedad que hace útiles a los monitores para lograr la exclusión mutua?',
-      placeholder: 'Ej: Solo un proceso puede estar activo en el monitor en cualquier instante',
-      accepted: [
-        'solo un proceso puede estar activo en un monitor en cualquier instante',
-        'solo un proceso puede estar activo en cualquier instante',
-        'un solo proceso activo a la vez',
-        'no pueden estar activos mas de un proceso en cualquier instante',
-        'solo puede haber un proceso activo dentro del monitor'
-      ],
-      validator: 'monitor_prop',
-      displayAnswer: 'Solo un proceso puede estar activo dentro del monitor en cualquier instante (garantizado por el compilador)',
-      explanation: 'La propiedad fundamental de los monitores es que únicamente un proceso puede estar activo dentro del monitor en cualquier instante de tiempo, y al ser una construcción del lenguaje de programación, el compilador implementa automáticamente la exclusión mutua.'
-    },
-    {
-      id: 'int_prac_3',
-      category: 'Globales / Integradores',
-      exam: 'Integrador - Tema Práctico',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 3: En la siguiente imagen se mencionan algunos de los pasos que se llevan a cabo cuando se realiza una llamada al sistema. Ordénelos según se producen colocando los números separados por coma:',
-      mediaHtml: D.CUADRO_SYSCALL_6_PASOS,
-      placeholder: 'Ej: 3, 4, 6, 5, 2, 1',
-      accepted: ['3, 4, 6, 5, 2, 1', '3,4,6,5,2,1', '3 4 6 5 2 1', '3-4-6-5-2-1', '3, 4, 5, 6, 2, 1', '3,4,5,6,2,1'],
-      displayAnswer: '3, 4, 6, 5, 2, 1',
-      explanation: 'Según Tanenbaum (Fig. 1-17): primero el programa apila los parámetros como el buffer en la pila (3), luego invoca el procedimiento de llamada al sistema (4), éste ejecuta la instrucción TRAP para pasar a modo kernel (6), se resguarda el contador de programa (5), el kernel despacha/selecciona el manejador de llamadas al sistema mediante la tabla (2) y al finalizar retorna al programa de usuario (1).'
-    },
-    {
       id: 'int_prac_4',
       category: 'Globales / Integradores',
       exam: 'Integrador - Tema Práctico',
@@ -954,18 +397,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       accepted: ['(1, 118a)', '(01, 118a)', '(0x1, 0x118a)', '(0x01, 0x118a)', '(0x01; 0x118a)', '(1; 118a)', '1, 118a', '0x01, 0x118a'],
       displayAnswer: '(0x01, 0x118A)  /  (1, 118A)',
       explanation: '8 KB = 8192 bytes = 2^13 bytes → los 13 bits menos significativos son el desplazamiento. En binario: 0x318A = 0011 0001 1000 1010₂ = 001 | 1 0001 1000 1010₂ → Página = 001₂ = 0x01, Offset = 1 0001 1000 1010₂ = 0x118A.'
-    },
-    {
-      id: 'int_prac_5',
-      category: 'Globales / Integradores',
-      exam: 'Integrador - Tema Práctico',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 5: Se ha implementado un mecanismo para prevenir el interbloqueo, que consiste en asegurar que ningún proceso pueda solicitar/tomar recursos mientras otro recurso requerido está siendo retenido (o exigir pedir todos los recursos juntos sin retener otros mientras espera). ¿Cuál de las cuatro condiciones de Coffman se está previniendo?',
-      placeholder: 'Ej: Contención y espera',
-      accepted: ['contencion y espera', 'retencion y espera', 'posesion y espera', 'hold and wait'],
-      displayAnswer: 'Contención y espera',
-      explanation: 'Al impedir que un proceso retenga recursos mientras solicita/espera otros que están ocupados, se ataca la condición de Contención y espera (Hold and Wait).'
     },
     {
       id: 'int_prac_6',
@@ -1448,22 +879,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Tamaño de marco = 65536 / 32 = 2048 bytes = 2 × 1024 bytes. Dirección virtual 4421 = 2 × 2048 + 325 → Página 2, offset 325. Como la página 2 va al marco 7: Dirección física = 7 × 2 × 1024 + 325 = 14661₁₀ (opción d).'
     },
     {
-      id: 'p2_251024_t1_3',
-      category: '2º Parcial Práctica',
-      exam: '2º Examen Práctica 25/10/2024 - Tema 1',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 3: Suponga un sistema de archivos que utiliza asignación indexada de espacio en disco donde la representación de espacio libre se lleva a cabo mediante un mapa de bits. Si se reduce el tamaño de bloque del sistema de archivos:',
-      options: [
-        'a) Aumentará la fragmentación externa',
-        'b) Disminuirá la fragmentación interna',
-        'c) Disminuirá el tamaño del mapa de bits',
-        'd) Ninguna de las anteriores es cierta'
-      ],
-      answer: 1,
-      explanation: 'Al reducir el tamaño de bloque se desperdicia menos espacio en el último bloque de cada archivo, por lo que disminuye la fragmentación interna (mientras que el mapa de bits aumenta de tamaño porque hay más bloques totales).'
-    },
-    {
       id: 'p2_251024_t1_4',
       category: '2º Parcial Práctica',
       exam: '2º Examen Práctica 25/10/2024 - Tema 1',
@@ -1476,24 +891,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
         { label: '2. Dirección virtual 0x00002345', placeholder: 'Ej: Fallo de página', accepted: ['fallo de pagina', 'ausente'], displayAnswer: 'Fallo de página (página 0x002 tiene Presente/Ausente = 0)' }
       ],
       explanation: 'Con páginas de 4 KB (12 bits = 3 dígitos hex de offset):\n1) 0x0000C011 → página 0x0000C, offset 0x011: no está cargada en la tabla → Fallo de página.\n2) 0x00002345 → página 0x00002, offset 0x345: en la tabla la página 0x002 tiene bit Presente/Ausente = 0 → Fallo de página.'
-    },
-    {
-      id: 'p2_251024_t1_5',
-      category: '2º Parcial Práctica',
-      exam: '2º Examen Práctica 25/10/2024 - Tema 1',
-      points: 20,
-      type: 'multi',
-      prompt: 'Ejercicio 5: (Selección múltiple) Si se utiliza el método de E/S por interrupción se puede decir que:',
-      options: [
-        'a) No se desperdicia tiempo testeando.',
-        'b) Sí se desperdicia tiempo testeando.',
-        'c) Es más complicado de reproducir para probar.',
-        'd) Provoca una mayor sobrecarga u overhead (frente a sondeo activo de CPU desperdiciada).',
-        'e) Puede responder más rápidamente a una señal.',
-        'f) El programa que solicita la E/S queda liberado (o la CPU queda libre para otras tareas).'
-      ],
-      answers: [0, 2, 4, 5],
-      explanation: 'Según clave corregida de cátedra (+5 por cada una): a) No desperdicia CPU en espera ocupada/testeando, c) al ser asíncrono es más difícil de reproducir para pruebas, e) responde de inmediato a la señal de interrupción, y f) libera la ejecución de otras tareas mientras se completa la E/S.'
     },
     {
       id: 'p2_251024_t1_6',
@@ -1588,22 +985,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Tamaño de marco = 65536 / 32 = 2048 bytes (2*1024). Dirección virtual 0x3055 = 3×4096 + 5×16 + 5 = 12373₁₀. Dividiendo 12373 ÷ 2048 = página 6 con resto (offset) 85₁₀. Como la página 6 va al marco 15: Dirección física = 15*2*1024 + 85 (opción c).'
     },
     {
-      id: 'p2_251024_t2_3',
-      category: '2º Parcial Práctica',
-      exam: '2º Examen Práctica 25/10/2024 - Tema 2',
-      points: 10,
-      type: 'single',
-      prompt: 'Ejercicio 3: Suponga un sistema de archivos con asignación indexada que representa el espacio libre mediante un mapa de bits. Si se aumenta el tamaño de bloque del sistema de archivos (respecto del mapa de bits):',
-      options: [
-        'a) Aumentará la fragmentación externa',
-        'b) Disminuirá la fragmentación interna',
-        'c) Disminuirá el tamaño del mapa de bits (y aumentará la fragmentación interna)',
-        'd) Las opciones presentadas no son correctas'
-      ],
-      answer: 2,
-      explanation: 'Al aumentar el tamaño de bloque entran menos bloques totales en el disco; como el mapa de bits usa 1 bit por bloque, disminuye el tamaño del mapa de bits (y al mismo tiempo aumenta la fragmentación interna).'
-    },
-    {
       id: 'p2_251024_t2_4',
       category: '2º Parcial Práctica',
       exam: '2º Examen Práctica 25/10/2024 - Tema 2',
@@ -1616,24 +997,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
         { label: '2. Dirección virtual 0x00008AB2', placeholder: 'Ej: Fallo de página', accepted: ['fallo de pagina', 'fuera de tabla', 'ausente', 'error'], displayAnswer: 'Fallo de página (página 0x008 no está en tabla)' }
       ],
       explanation: '1) 0x00001F34 → página 0x001 (Presente = 1, Marco = 0xFFD) y offset = 0xF34 → Dirección física = 0xFFDF34.\n2) 0x00008AB2 → página 0x008, no figura en la tabla → Fallo de página.'
-    },
-    {
-      id: 'p2_251024_t2_5',
-      category: '2º Parcial Práctica',
-      exam: '2º Examen Práctica 25/10/2024 - Tema 2',
-      points: 20,
-      type: 'multi',
-      prompt: 'Ejercicio 5: (Selección múltiple) Si consideramos el uso del método de E/S por DMA (Acceso Directo a Memoria), ¿cuáles afirmaciones son correctas?',
-      options: [
-        'a) El CPU puede realizar otras tareas mientras se efectúa la transferencia de datos.',
-        'b) La implementación de DMA es sencilla y fácil de manejar (más simple que E/S programada).',
-        'c) Se reduce la carga de trabajo del CPU al gestionar las transferencias de datos.',
-        'd) Puede requerir más ciclos de reloj para establecer la transferencia (inicialización / robo de ciclo).',
-        'e) El controlador envía señal de interrupción al CPU para indicar la finalización de la transferencia.',
-        'f) Hay un mayor riesgo de corrupción de datos debido al acceso simultáneo de múltiples dispositivos.'
-      ],
-      answers: [0, 2, 3, 4],
-      explanation: 'Opciones correctas (4 × 5 = 20p): a) libera a la CPU durante la transferencia del bloque, c) reduce drásticamente las interrupciones y carga de CPU, d) programar el controlador DMA/adquirir bus conlleva ciclos iniciales o robo de ciclo, y e) interrumpe a la CPU únicamente al finalizar la transferencia.'
     },
     {
       id: 'p2_251024_t2_6',
