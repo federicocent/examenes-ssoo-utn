@@ -197,18 +197,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'Con a = 1/2: E₁ = T₀; E₂ = ½E₁ + ½T₁; E₃ = ½E₂ + ½T₂; E₄ = ½E₃ + ½T₃:\n• A: 10 → 12,5 → 12,25 → 10,125 ms\n• B: 20 → 22,5 → 22,25 → 20,125 ms\n• C: 5 → 6 → 6 → 5 ms\nPara minimizar el tiempo de respuesta medio (SJF) se ejecutan de menor a mayor: C, A, B.'
     },
     {
-      id: 'int_131125_t1_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 1',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 7: Se necesitan gestionar procesos en segundo plano, complete con el comando que debe ingresar en Linux.',
-      placeholder: 'Ej: bg',
-      accepted: ['bg', 'jobs', 'fg', '&', 'comando &'],
-      displayAnswer: 'bg (o & al lanzar / jobs para listar)',
-      explanation: 'El comando `bg` reanuda un proceso detenido pasándolo a segundo plano (background); `&` al final del comando lo inicia en segundo plano y `jobs` lista los trabajos.'
-    },
-    {
       id: 'int_131125_t1_8',
       category: 'Globales / Integradores',
       exam: 'Integrador 13/11/2025 - Tema 1',
@@ -345,34 +333,9 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       displayAnswer: 'AAAADDCCCCBBBBBBEEEEEEE',
       explanation: 't=0..1: A (resta 3). En t=1 llega B(6 > 3), sigue A. En t=3 llega C(4 > 1), sigue A hasta terminar en t=4 (AAAA). En t=4 llega D(2 < C=4 < B=6): ejecuta D de 4..6 (DD). En t=6 llega E(7): entre C(4), B(6) y E(7) ejecuta C de 6..10 (CCCC), luego B de 10..16 (BBBBBB) y E de 16..23 (EEEEEEE).'
     },
-    {
-      id: 'int_131125_t2_9',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 2',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 9: En una máquina que corre Linux se está ejecutando Firefox y se desea obtener el process ID de este navegador. Escriba la sintaxis completa del comando (excluya top y htop).',
-      placeholder: 'Ej: pidof firefox  o  pgrep firefox  o  ps aux | grep firefox',
-      accepted: ['pidof firefox', 'pgrep firefox', 'ps aux | grep firefox', 'ps -ef | grep firefox', 'ps -A | grep firefox', 'ps -e | grep firefox', 'ps -C firefox -o pid='],
-      displayAnswer: 'pidof firefox  (también válido: pgrep firefox o ps aux | grep firefox)',
-      explanation: 'Tanto `pidof firefox` como `pgrep firefox` devuelven directamente el PID del proceso; también es válido filtrar la salida de `ps` con `ps aux | grep firefox` o `ps -ef | grep firefox`.'
-    },
-    {
-      id: 'int_131125_t2_10',
-      category: 'Globales / Integradores',
-      exam: 'Integrador 13/11/2025 - Tema 2',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 10: El comando Linux "ps" brinda información sobre procesos. Mencione 4 campos (columnas) que se muestran cuando se emite el comando, separados por coma.',
-      placeholder: 'Ej: PID, TTY, TIME, CMD',
-      accepted: ['pid, tty, time, cmd'],
-      validator: 'ps4',
-      displayAnswer: 'PID, TTY, TIME, CMD (también UID/USER, PPID, %CPU, %MEM, STAT, VSZ, RSS, START)',
-      explanation: 'Al emitir `ps` sin opciones muestra por defecto las 4 columnas: PID (ID del proceso), TTY (terminal asociada), TIME (tiempo de CPU acumulado) y CMD (comando ejecutado). Con opciones como `-f` o `aux` agrega UID/USER, PPID, C/%CPU, %MEM, VSZ, RSS, STAT, STIME/START.'
-    },
 
     // =========================================================================
-    // 9. INTEGRADOR - TEMA PRÁCTICO (10 Actividades)
+    // 9. INTEGRADOR - TEMA PRÁCTICO
     // =========================================================================
     {
       id: 'int_prac_1',
@@ -397,30 +360,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       accepted: ['(1, 118a)', '(01, 118a)', '(0x1, 0x118a)', '(0x01, 0x118a)', '(0x01; 0x118a)', '(1; 118a)', '1, 118a', '0x01, 0x118a'],
       displayAnswer: '(0x01, 0x118A)  /  (1, 118A)',
       explanation: '8 KB = 8192 bytes = 2^13 bytes → los 13 bits menos significativos son el desplazamiento. En binario: 0x318A = 0011 0001 1000 1010₂ = 001 | 1 0001 1000 1010₂ → Página = 001₂ = 0x01, Offset = 1 0001 1000 1010₂ = 0x118A.'
-    },
-    {
-      id: 'int_prac_6',
-      category: 'Globales / Integradores',
-      exam: 'Integrador - Tema Práctico',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 6: Coloque la sentencia completa para monitorear procesos en tiempo real en Linux. Excluya de la respuesta los comandos top y htop.',
-      placeholder: 'Ej: watch ps aux  o  atop',
-      accepted: ['watch ps aux', 'watch -n 1 ps aux', 'watch ps -ef', 'watch -n 1 ps -ef', 'atop', 'glances', 'vmstat 1'],
-      displayAnswer: 'watch ps aux  (también válido: watch -n 1 ps -ef, atop, glances)',
-      explanation: 'Nota de corrección de cátedra: `ps aux` solo muestra una foto estática (se corrige como incorrecto si no lleva `watch`). Para monitoreo en tiempo real sin top/htop se usa `watch ps aux` (o herramientas de tiempo real como `atop` / `glances`).'
-    },
-    {
-      id: 'int_prac_7',
-      category: 'Globales / Integradores',
-      exam: 'Integrador - Tema Práctico',
-      points: 10,
-      type: 'text',
-      prompt: 'Actividad 7: Se necesitan gestionar procesos en segundo plano, complete con el comando que debe ingresar en Linux para pasar procesos a segundo plano.',
-      placeholder: 'Ej: bg',
-      accepted: ['bg'],
-      displayAnswer: 'bg',
-      explanation: 'El comando `bg` (background) pasa un proceso detenido en la terminal a ejecutarse en segundo plano.'
     },
     {
       id: 'int_prac_8',
@@ -780,19 +719,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       explanation: 'LRU (Least Recently Used) desaloja la página cuya "Última referencia" sea la más antigua (menor valor): la página 1 tiene última referencia en 265 (< 270, 280, 285).'
     },
     {
-      id: 'rec2p_311024_3_linux',
-      category: '2º Parcial Práctica',
-      exam: 'Recuperatorio 2º Examen 31/10/2024 - Tema 1',
-      points: 20,
-      type: 'blanks',
-      prompt: 'Ejercicio 3 (Variante Linux): Complete en cada caso:\na) Comando en Linux para formatear un archivo de imagen (p. ej. imagen.img con ext4):\nb) Comando en Linux para crear un archivo simbólico (enlace simbólico) a un archivo de texto:',
-      fields: [
-        { label: 'a) Formatear imagen / bucle', placeholder: 'Ej: mkfs.ext4 imagen.img', accepted: ['mkfs', 'mkfs.ext4', 'mkfs.ext4 imagen.img', 'mkfs -t ext4 imagen.img', 'mkfs.ext3 imagen.img', 'mkfs.vfat imagen.img'], validator: 'mkfs_cmd', displayAnswer: 'mkfs.ext4 imagen.img (o mkfs -t ext4 ...)' },
-        { label: 'b) Crear enlace simbólico', placeholder: 'Ej: ln -s archivo.txt enlace.txt', accepted: ['ln -s'], validator: 'lns_cmd', displayAnswer: 'ln -s archivo.txt enlace_simbolico' }
-      ],
-      explanation: 'En Linux se formatea un sistema de archivos sobre una imagen o dispositivo loop usando `mkfs` (ej. `mkfs.ext4 archivo.img` o `mkfs -t ext4 /dev/loop0`), y los enlaces simbólicos se crean con `ln -s <origen> <enlace>`.'
-    },
-    {
       id: 'rec2p_311024_4_8kb',
       category: '2º Parcial Práctica',
       exam: 'Recuperatorio 2º Examen 31/10/2024 - Tema 1',
@@ -815,19 +741,6 @@ window.BANCO_PREGUNTAS = window.BANCO_PREGUNTAS || [];
       accepted: ['2^36', '68719476736', '68.719.476.736', '64g', '2 a la 36'],
       displayAnswer: '2^36 entradas (68.719.476.736)',
       explanation: '4 KB = 2^12 bytes → 12 bits de desplazamiento. Bits de página virtual = 48 − 12 = 36 bits → 2^36 entradas.'
-    },
-    {
-      id: 'rec2p_311024_5',
-      category: '2º Parcial Práctica',
-      exam: 'Recuperatorio 2º Examen 31/10/2024 - Tema 1',
-      points: 20,
-      type: 'blanks',
-      prompt: 'Ejercicio 5: Complete el nombre base del comando en Linux para:\na) Formatear el dispositivo de bucle:\nb) Crear un Dispositivo de Caracteres:',
-      fields: [
-        { label: 'a) Comando para formatear dispositivo de bucle', placeholder: 'Ej: mkfs (o mkfs.ext4 /dev/loop0)', accepted: ['mkfs', 'mkfs.ext4', 'mkfs.ext3', 'mkfs.vfat'], validator: 'mkfs_cmd', displayAnswer: 'mkfs (ej. sudo mkfs.ext4 /dev/loop0)' },
-        { label: 'b) Comando para crear dispositivo de caracteres', placeholder: 'Ej: mknod (ej. mknod /dev/disp c 89 1)', accepted: ['mknod'], validator: 'mknod_cmd', displayAnswer: 'mknod (con tipo c, ej: sudo mknod nombre c mayor menor)' }
-      ],
-      explanation: '`mkfs` formatea el dispositivo de bucle (asociado previamente con `losetup`), mientras que `mknod <nombre> c <mayor> <menor>` crea un archivo especial de dispositivo de caracteres.'
     },
 
     // =========================================================================

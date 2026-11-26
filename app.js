@@ -2,6 +2,7 @@
 (function () {
   const STORAGE_CUSTOM = 'ssoo_utn_preguntas_usuario_v1';
   const STORAGE_WRONG = 'ssoo_utn_errores_ids_v1';
+  const STORAGE_TRASH = 'ssoo_utn_papelera_ids_v1';
   const STORAGE_STATS = 'ssoo_utn_stats_examenes_v1';
   const STORAGE_THEME = 'ssoo_utn_tema_v1';
 
@@ -14,7 +15,9 @@
 
   let customQuestions = loadJson(STORAGE_CUSTOM, []);
   let wrongIds = new Set(loadJson(STORAGE_WRONG, []));
+  let trashedIds = new Set(loadJson(STORAGE_TRASH, []));
   let examStats = loadJson(STORAGE_STATS, {});
+  let toastTimer = null;
 
   // Estado de la sesión activa
   let session = {
@@ -51,8 +54,12 @@
     }
   }
 
-  function getAllQuestions() {
+  function getRawQuestions() {
     return [...(window.BANCO_PREGUNTAS || []), ...customQuestions];
+  }
+
+  function getAllQuestions() {
+    return getRawQuestions().filter(q => !trashedIds.has(q.id));
   }
 
   function escapeHtml(str) {
@@ -166,26 +173,36 @@
   // INICIALIZACIÓN DE FILTROS Y SESIÓN
   // =========================================================================
   function populateFilters() {
-    const all = getAllQuestions();
-    const validIds = new Set(all.map(q => q.id));
-    const cleanedWrong = [...wrongIds].filter(id => validIds.has(id));
+    const raw = getRawQuestions();
+    const rawIds = new Set(raw.map(q => q.id));
+
+    const cleanedTrash = [...trashedIds].filter(id => rawIds.has(id));
+    if (cleanedTrash.length !== trashedIds.size) {
+      trashedIds = new Set(cleanedTrash);
+      saveJson(STORAGE_TRASH, cleanedTrash);
+    }
+
+    const cleanedWrong = [...wrongIds].filter(id => rawIds.has(id));
     if (cleanedWrong.length !== wrongIds.size) {
       wrongIds = new Set(cleanedWrong);
       saveJson(STORAGE_WRONG, cleanedWrong);
     }
+
+    const all = getAllQuestions();
 
     const catSelect = document.getElementById('filter-category');
     const examSelect = document.getElementById('filter-exam');
     const prevCat = catSelect.value || 'ALL';
     const prevExam = examSelect.value || 'ALL';
 
+    const activeCustomCount = customQuestions.filter(q => !trashedIds.has(q.id)).length;
     const categories = [
-      { val: 'ALL', label: `Todas las prácticas (${all.length} ejercicios)` },
+      { val: 'ALL', label: `Todas las prácticas (${all.length} ejercicios activos)` },
       { val: 'CARPETA_PAGINA', label: 'Solo carpeta "pagina" (Globales + 2ºP Práctica)' },
       { val: 'Globales / Integradores', label: 'Globales / Integradores (Práctica)' },
       { val: '2º Parcial Práctica', label: '2º Parcial Práctica' },
       { val: '1º Parcial Práctica', label: '1º Parcial Práctica' },
-      { val: 'Mis Preguntas', label: `Mis Preguntas Agregadas (${customQuestions.length})` }
+      { val: 'Mis Preguntas', label: `Mis Preguntas Agregadas (${activeCustomCount})` }
     ];
 
     catSelect.innerHTML = categories
@@ -198,6 +215,7 @@
     renderCatalog();
     renderCustomList();
     renderMistakesView();
+    renderTrashView();
     populateCreatorExamDatalist();
   }
 
@@ -332,7 +350,10 @@
             <span class="q-badge">${escapeHtml(q.exam)}</span>
             ${isCustom ? '<span class="q-badge custom">Agregada por vos</span>' : ''}
           </div>
-          <span class="q-badge">${q.points || 10} pts</span>
+          <div class="btn-group">
+            <span class="q-badge">${q.points || 10} pts</span>
+            <button type="button" class="btn btn-sm" data-action="trash-one" data-qid="${escapeHtml(q.id)}" title="Eliminar temporalmente y mover a la Papelera de reciclaje">🗑️ Enviar a papelera</button>
+          </div>
         </div>
 
         <div class="q-prompt">${escapeHtml(q.prompt)}</div>
@@ -635,9 +656,142 @@
   }
 
   function updateHeaderBadges() {
-    document.getElementById('badge-total-bank').textContent = getAllQuestions().length;
-    document.getElementById('badge-mistakes').textContent = wrongIds.size;
+    const active = getAllQuestions();
+    document.getElementById('badge-total-bank').textContent = active.length;
+    document.getElementById('badge-mistakes').textContent = active.filter(q => wrongIds.has(q.id)).length;
+    document.getElementById('badge-trash').textContent = trashedIds.size;
     document.getElementById('badge-custom').textContent = customQuestions.length;
+  }
+
+  function showToast(msgHtml) {
+    let el = document.getElementById('toast-undo-bar');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'toast-undo-bar';
+      el.className = 'toast-undo';
+      document.body.appendChild(el);
+    }
+    el.innerHTML = msgHtml;
+    el.style.display = 'flex';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      el.style.display = 'none';
+    }, 4500);
+  }
+
+  function trashOneQuestion(qId) {
+    if (!qId || trashedIds.has(qId)) return;
+    trashedIds.add(qId);
+    saveJson(STORAGE_TRASH, [...trashedIds]);
+
+    session.questions = session.questions.filter(q => q.id !== qId);
+    delete session.answers[qId];
+    delete session.checked[qId];
+    if (session.currentIndex >= session.questions.length && session.questions.length > 0) {
+      session.currentIndex = session.questions.length - 1;
+    }
+
+    populateFilters();
+    renderSession();
+    showToast(`<span>🗑️ Pregunta enviada a la Papelera (${trashedIds.size})</span> <button type="button" data-action="restore-one" data-qid="${escapeHtml(qId)}">Deshacer</button>`);
+  }
+
+  function restoreOneQuestion(qId) {
+    if (!qId || !trashedIds.has(qId)) return;
+    trashedIds.delete(qId);
+    saveJson(STORAGE_TRASH, [...trashedIds]);
+
+    const toastEl = document.getElementById('toast-undo-bar');
+    if (toastEl) toastEl.style.display = 'none';
+
+    populateFilters();
+    if (session.questions.length === 0) {
+      startNewSession();
+    } else {
+      const q = getRawQuestions().find(item => item.id === qId);
+      const catVal = document.getElementById('filter-category').value;
+      const examVal = document.getElementById('filter-exam').value;
+      const matchesCat = filterByCategory(q ? [q] : [], catVal).length > 0;
+      const matchesExam = examVal === 'ALL' || (q && q.exam === examVal);
+      if (q && matchesCat && matchesExam && !session.questions.some(item => item.id === qId)) {
+        session.questions.push(q);
+        renderSession();
+      }
+    }
+    showToast(`<span>♻️ Pregunta restaurada al banco activo</span>`);
+  }
+
+  function restoreAllTrash() {
+    if (trashedIds.size === 0) return;
+    trashedIds.clear();
+    saveJson(STORAGE_TRASH, []);
+    populateFilters();
+    if (session.questions.length === 0) {
+      startNewSession();
+    }
+    showToast(`<span>♻️ Todas las preguntas fueron restauradas al banco activo</span>`);
+  }
+
+  function renderTrashView() {
+    const trashedList = getRawQuestions().filter(q => trashedIds.has(q.id));
+    const box = document.getElementById('trash-container');
+    if (!box) return;
+
+    if (trashedList.length === 0) {
+      box.innerHTML = `
+        <div class="panel" style="text-align:center; padding:2.2rem 1rem;">
+          <h3>🗑️ La papelera de reciclaje está vacía</h3>
+          <p style="color:var(--text-muted); max-width:580px; margin:0.4rem auto 0;">
+            Cuando quieras descartar temporalmente una pregunta que ya dominás o no querés practicar ahora, tocá <strong>"🗑️ Enviar a papelera"</strong> en su tarjeta. Quedará guardada acá para restaurarla cuando quieras.
+          </p>
+        </div>`;
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">🗑️ Papelera de Reciclaje (${trashedList.length} ${trashedList.length === 1 ? 'pregunta oculta' : 'preguntas ocultas'})</h3>
+            <p style="margin:0.25rem 0 0; font-size:0.85rem; color:var(--text-muted);">
+              Estas preguntas están excluidas temporalmente de las tandas y exámenes hasta que las restaures.
+            </p>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="btn-restore-all-trash">♻️ Restaurar todas (${trashedList.length})</button>
+          </div>
+        </div>
+        <div class="options-list">
+          ${trashedList.map(q => {
+            const hasMedia = Boolean(q.mediaHtml || q.imageUrl || q.codeText);
+            let mediaPreview = '';
+            if (hasMedia) {
+              mediaPreview = `
+                <details style="margin-top:0.5rem;">
+                  <summary style="cursor:pointer; font-size:0.82rem; color:var(--primary); font-weight:650;">Ver diagrama / tabla / código adjunto</summary>
+                  <div style="margin-top:0.5rem;">
+                    ${q.mediaHtml ? `<div class="q-media">${q.mediaHtml}</div>` : ''}
+                    ${q.imageUrl ? `<div class="q-media"><img src="${escapeHtml(q.imageUrl)}" alt="Diagrama"></div>` : ''}
+                    ${q.codeText ? `<div class="q-media"><div class="code-box">${escapeHtml(q.codeText)}</div></div>` : ''}
+                  </div>
+                </details>`;
+            }
+            return `
+              <div class="option-item" style="cursor:default; justify-content:space-between; align-items:flex-start; gap:1rem;">
+                <div style="flex:1; min-width:0;">
+                  <div class="q-badges">
+                    <span class="q-badge cat">${escapeHtml(q.category)}</span>
+                    <span class="q-badge">${escapeHtml(q.exam)}</span>
+                    <span class="q-badge">${q.points || 10} pts</span>
+                  </div>
+                  <div style="margin-top:0.4rem; font-weight:600; white-space:pre-line;">${escapeHtml(q.prompt)}</div>
+                  ${mediaPreview}
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" style="flex-shrink:0;" data-action="restore-one" data-qid="${escapeHtml(q.id)}">♻️ Restaurar</button>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
   }
 
   // =========================================================================
@@ -902,18 +1056,25 @@
       el.innerHTML = `<p style="color:var(--text-muted); margin:0;">Todavía no agregaste preguntas propias. Usá el formulario de arriba para crear preguntas con texto, opciones, tablas o imágenes.</p>`;
       return;
     }
-    el.innerHTML = customQuestions.map(q => `
+    el.innerHTML = customQuestions.map(q => {
+      const inTrash = trashedIds.has(q.id);
+      return `
       <div class="option-item" style="cursor:default; justify-content:space-between; align-items:center;">
         <div>
           <span class="q-badge custom">${escapeHtml(q.type.toUpperCase())}</span>
           <span class="q-badge">${escapeHtml(q.exam)}</span>
+          ${inTrash ? '<span class="q-badge" style="color:var(--warning); font-weight:750;">🗑️ En papelera</span>' : ''}
           <div style="margin-top:0.3rem; font-weight:600;">${escapeHtml(q.prompt)}</div>
         </div>
         <div class="btn-group">
+          ${inTrash
+            ? `<button type="button" class="btn btn-sm btn-primary" data-action="restore-one" data-qid="${escapeHtml(q.id)}">♻️ Restaurar</button>`
+            : `<button type="button" class="btn btn-sm" data-action="trash-one" data-qid="${escapeHtml(q.id)}">🗑️ Papelera</button>`}
           <button type="button" class="btn btn-sm" data-action="edit-custom" data-qid="${escapeHtml(q.id)}">Editar</button>
-          <button type="button" class="btn btn-sm btn-danger" data-action="delete-custom" data-qid="${escapeHtml(q.id)}">Eliminar</button>
+          <button type="button" class="btn btn-sm btn-danger" data-action="delete-custom" data-qid="${escapeHtml(q.id)}">Borrar definitivo</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   // Exportar / Importar JSON
@@ -922,6 +1083,7 @@
       exportedAt: new Date().toISOString(),
       customQuestions,
       wrongIds: [...wrongIds],
+      trashedIds: [...trashedIds],
       examStats
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -949,6 +1111,10 @@
         if (Array.isArray(data.wrongIds)) {
           data.wrongIds.forEach(id => wrongIds.add(id));
           saveJson(STORAGE_WRONG, [...wrongIds]);
+        }
+        if (Array.isArray(data.trashedIds)) {
+          data.trashedIds.forEach(id => trashedIds.add(id));
+          saveJson(STORAGE_TRASH, [...trashedIds]);
         }
         populateFilters();
         startNewSession();
@@ -1052,6 +1218,10 @@
         switchTab('practicar');
         startNewSession();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (action === 'trash-one') {
+        trashOneQuestion(btn.dataset.qid);
+      } else if (action === 'restore-one') {
+        restoreOneQuestion(btn.dataset.qid);
       } else if (action === 'remove-mistake') {
         wrongIds.delete(btn.dataset.qid);
         saveJson(STORAGE_WRONG, [...wrongIds]);
@@ -1069,9 +1239,14 @@
       } else if (action === 'edit-custom') {
         editCustomQuestion(btn.dataset.qid);
       } else if (action === 'delete-custom') {
-        if (confirm('¿Seguro que querés eliminar esta pregunta personalizada?')) {
-          customQuestions = customQuestions.filter(q => q.id !== btn.dataset.qid);
+        if (confirm('¿Seguro que querés eliminar definitivamente esta pregunta personalizada? (Si solo querés ocultarla, usá Papelera)')) {
+          const delId = btn.dataset.qid;
+          customQuestions = customQuestions.filter(q => q.id !== delId);
+          trashedIds.delete(delId);
+          wrongIds.delete(delId);
           saveJson(STORAGE_CUSTOM, customQuestions);
+          saveJson(STORAGE_TRASH, [...trashedIds]);
+          saveJson(STORAGE_WRONG, [...wrongIds]);
           populateFilters();
           startNewSession();
         }
@@ -1145,6 +1320,13 @@
           updateHeaderBadges();
           renderMistakesView();
         }
+      }
+    });
+
+    // Eventos de pestaña Papelera
+    document.getElementById('trash-container').addEventListener('click', (e) => {
+      if (e.target.id === 'btn-restore-all-trash') {
+        restoreAllTrash();
       }
     });
 

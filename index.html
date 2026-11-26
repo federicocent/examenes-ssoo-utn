@@ -27,6 +27,9 @@
         <button type="button" class="tab-btn" data-tab="errores">
           🎯 Repasar Falladas <span class="badge-count danger" id="badge-mistakes">0</span>
         </button>
+        <button type="button" class="tab-btn" data-tab="papelera">
+          🗑️ Papelera <span class="badge-count muted" id="badge-trash">0</span>
+        </button>
         <button type="button" class="tab-btn" data-tab="agregar">
           ➕ Agregar Pregunta <span class="badge-count" id="badge-custom">0</span>
         </button>
@@ -144,6 +147,11 @@
       <div id="mistakes-container"></div>
     </section>
 
+    <!-- ==================== SECCIÓN 3B: PAPELERA DE RECICLAJE ==================== -->
+    <section id="view-papelera" class="view-section">
+      <div id="trash-container"></div>
+    </section>
+
     <!-- ==================== SECCIÓN 4: AGREGAR / GESTIONAR PREGUNTAS ==================== -->
     <section id="view-agregar" class="view-section">
       <form id="creator-form" class="panel">
@@ -233,7 +241,7 @@
             </div>
 
             <div class="field-group">
-              <label for="new-code">Bloque de Código (C, Assembler, Pseudocódigo, Linux)</label>
+              <label for="new-code">Bloque de Código (C, Assembler, Pseudocódigo)</label>
               <textarea id="new-code" rows="4" placeholder="Opcional: pegá código que acompañe la pregunta..." style="font-family:monospace;"></textarea>
             </div>
           </div>
